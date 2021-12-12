@@ -1,6 +1,7 @@
 import fs from 'fs';
 import SerialPort from 'serialport';
 
+export const SERIAL_PORT_IN = '/tmp/DEVTERM_PRINTER_IN';
 export const ADC_FILE_PATH = '/tmp/devterm_adc';
 export const BATTERY_PATH = '/sys/class/power_supply/axp20x-battery/capacity';
 export const TEMP_MAX = 64;
@@ -16,7 +17,7 @@ const TempNominal = 25;
  * @returns SerialPort
  */
 export const getThermalPrinterPort = () => {
-  return new SerialPort('/tmp/DEVTERM_PRINTER_IN', {
+  return new SerialPort(SERIAL_PORT_IN, {
     baudRate: 115200,
     dataBits: 8
   });
