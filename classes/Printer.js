@@ -26,6 +26,7 @@ export default class Printer {
     }
     this.debug = true;
     this.active = true;
+    // ###
     this.config = getDefaultConfig();
     this.port = port;
     this.port.on('error', function (err) {
@@ -33,9 +34,69 @@ export default class Printer {
     });
   }
 
+  get fontWidth () {
+    return FONT_WIDTHS[this.config.font];
+  }
+
+  get marginCharsCount () {
+    return (this.config.margin[0] / this.fontWidth);
+  }
+
+  get maxRowChars () {
+    return MAX_DOTS / this.fontWidth;
+  }
+
+  stdoutOverride (options) {
+    const { write, err } = { write: true, err: true, ...options };
+    const handler = this.write;
+    err && (process.stderr.write = (...args) => {
+      handler.bind(process.stderr)(...args);
+      return WRITE_DEFAULTS.error.bind(process.stderr)(...args);
+    });
+    write && (process.stdout.write = (...args) => {
+      handler.bind(process.stdout)(...args);
+      return WRITE_DEFAULTS.write.bind(process.stdout)(...args);
+    });
+  }
+
   writeTextTable (data, columns, options) {
-    const table = new Table(this, data, columns, options);
-    return this.writeLine(table.write());
+    return this.writeLine(this.createTextTable(data, columns, options).write());
+  }
+
+  createTextTable (data, columns, options) {
+    return new Table(this, data, columns, options);
+  }
+
+  /**
+ * Create String Grid
+ * @param Printer printer
+ * @param Function fnData
+ * @param Number columns
+ * @param Number gap Column Gap
+ * @returns String
+ */
+  async createStringGrid (fnData, columns = 1, gap = 2) {
+    const width = this.fontWidth * Math.round((this.maxRowChars) / columns - ((columns - 1) * gap) / columns + (this.marginCharsCount / columns));
+
+    gap = gap + gap % 2;
+    const data = await fnData(width);
+    if (data.length > columns) {
+      throw new Error('More Data Columns as defined columns');
+    }
+    let rows = data.reduce((result, value, column) => {
+      value.split('\n').forEach((v, i) => (result[column][i] = v));
+      return result;
+    }, Array(data.length).fill(null).map(Array));
+
+    const length = rows.reduce((result, value) => Math.max(value.length, result), 0);
+    rows = Array(length).fill(null).map((v, rowIndex) => rows.map((v, index) => rows[index][rowIndex]));
+
+    return rows.map((row) => row.map((v, i) => {
+      if (i < row.length - 1) {
+        return v.padEnd(v.length + gap, ' ');
+      }
+      return v;
+    }).join('')).join('\n');
   }
 
   /**
@@ -148,19 +209,6 @@ export default class Printer {
     return this.write(Buffer.from(value));
   }
 
-  stdoutOverride (options) {
-    const { write, err } = { write: true, err: true, ...options };
-    const handler = this.write;
-    err && (process.stderr.write = (...args) => {
-      handler.bind(process.stderr)(...args);
-      return WRITE_DEFAULTS.error.bind(process.stderr)(...args);
-    });
-    write && (process.stdout.write = (...args) => {
-      handler.bind(process.stdout)(...args);
-      return WRITE_DEFAULTS.write.bind(process.stdout)(...args);
-    });
-  }
-
   // commands
 
   /**
@@ -243,7 +291,14 @@ export default class Printer {
    * @returns Promise
    */
   setAlign (value) {
-    this.config.align = posInt(value) % Object.values(ALIGN).length;
+    value = posInt(value);
+    if (value === 1 || value === 49) {
+      this.config.align = ALIGN.CENTER;
+    } else if (value === 2 || value === 50) {
+      this.config.align = ALIGN.RIGHT;
+    } else {
+      this.config.align = ALIGN.LEFT;
+    }
     return this.writeBuffer([ASCII_ESC, 0x61, this.config.align]);
   }
 

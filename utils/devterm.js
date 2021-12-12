@@ -28,8 +28,12 @@ export const readAdc = async (path) => {
   return data;
 };
 
-export const getBattery = () => {
-  return readAdc(BATTERY_PATH);
+export const getBattery = async () => {
+  try {
+    return await readAdc(BATTERY_PATH);
+  } catch (error) {
+    throw new Error('Battery File cannot be opened');
+  }
 };
 
 export const getTemperature = async () => {

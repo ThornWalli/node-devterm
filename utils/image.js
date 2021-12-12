@@ -2,7 +2,7 @@
 import { promises } from 'fs';
 import canvas from 'canvas';
 import QRCode from 'qrcode';
-import { IMAGE_MAX, MAX_DOTS } from './config.js';
+import { MAX_DOTS } from './config.js';
 import JsBarcode from 'jsbarcode';
 
 const { createCanvas, loadImage } = canvas;
@@ -131,7 +131,7 @@ export const getCanvasFromImage = async (path) => {
  */
 const resizeCanvas = (canvas, width) => {
   width = Math.min(canvas.width, Math.min((width || canvas.width), MAX_DOTS));
-  width = width + (width % 8); // fix width for divide by 8
+  width += (width % 8) >= 3 ? (width % 8) : -(width % 8); // fix width for divide by 8
   const height = width * (canvas.height / canvas.width);
 
   const resizedCanvas = createCanvas(width, height);

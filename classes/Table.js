@@ -1,4 +1,5 @@
 import { ALIGN, FONT_WIDTHS, MAX_DOTS } from '../utils/config.js';
+import { alignValue, clampValue } from '../utils/string.js';
 
 export class TableColumn {
   constructor (title, align, fill) {
@@ -14,7 +15,7 @@ export default class Table {
     }
     this.printer = printer;
     const { width, title, border, header, footer } = {
-      width: 1,
+      width: MAX_DOTS,
       title: null,
       border: false,
       header: false,
@@ -30,32 +31,17 @@ export default class Table {
     this.data = data || [];
   }
 
-  get fontWidth () {
-    return FONT_WIDTHS[this.printer.config.font];
-  }
-
   get maxChars () {
-    return MAX_DOTS / this.fontWidth;
-  }
-
-  get marginCharsCount () {
-    return (this.printer.config.margin[0] / this.fontWidth);
+    return this.width / this.printer.fontWidth;
   }
 
   get rowLength () {
-    const width = Math.min(Math.max(this.width, 0.1), 1);
     return Math.round(
       Math.min(
-        (this.maxChars * width - 1),
-        Math.floor(this.maxChars - this.marginCharsCount)
+        (this.maxChars - 1),
+        Math.floor(this.maxChars - this.printer.marginCharsCount)
       )
     );
-  }
-
-  get rowEndLength () {
-    const width = Math.min(Math.max(this.width, 0.1), 1);
-    const rowWidth = this.maxChars * (1 - width);
-    return Math.round((rowWidth - Math.floor(this.marginCharsCount)));
   }
 
   get columnLength () {
@@ -85,9 +71,8 @@ export default class Table {
     if (this.border) {
       rows.push(topBottom);
     }
-    rows = rows.map(row => row.padEnd(this.rowLength + this.rowEndLength, ' '));
 
-    return rows.join('');
+    return rows.join('\n');
   }
 
   getHeader () {
@@ -96,7 +81,7 @@ export default class Table {
       if (this.border) {
         rows.push(
           this.filledRow(this.rowLength, '-'),
-       `|${alignValue(ALIGN.CENTER, this.title, this.rowLength - 2, ' ')}|`
+       `|${alignValue(ALIGN.CENTER, clampValue(this.title, this.rowLength - 2), this.rowLength - 2, ' ')}|`
         );
       } else {
         rows.push(this.columnCenter(this.title, this.rowLength, ' '));
@@ -155,7 +140,7 @@ export default class Table {
       const value = row[index] === undefined ? '' : String(row[index]);
       let padSize = defaultPadSize;
       padSize += offsets[index];
-      return alignValue(column.align, value, padSize, spacer);
+      return alignValue(column.align, clampValue(value, padSize), padSize, spacer);
     }).join(this.border ? '|' : '');
 
     if (this.border) {
@@ -182,23 +167,3 @@ export default class Table {
     return this.writeRow([], '-');
   }
 }
-
-const alignValue = (align, value, size, spacer) => {
-  switch (align) {
-    case ALIGN.CENTER:
-      value = clampValue(value, size);
-      return value.padStart((value.length + size) / 2, spacer).padEnd(size, spacer);
-    case ALIGN.RIGHT:
-      return clampValue(value, size).padStart(size, spacer);
-    case ALIGN.LEFT:
-    default:
-      return clampValue(value, size).padEnd(size, spacer);
-  }
-};
-
-const clampValue = (value, size) => {
-  if (value.length < size) {
-    return value;
-  }
-  return value.slice(0, size - 2).padEnd(size, '.');
-};

@@ -2,7 +2,8 @@
 import canvas from 'canvas';
 const { createCanvas } = canvas;
 
-export const getCuby = async (scale = 1) => {
+export const getCuby = (width) => {
+  const scale = Math.round(width / 16);
   const canvas = createCanvas(16 * scale, 11 * scale);
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = '#fff';
