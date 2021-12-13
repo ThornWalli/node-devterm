@@ -7,11 +7,16 @@ const printer = createPrinter();
 async function run () {
   printer.reset();
 
-  // printer.setMargin(50);
   printer.setAlign(ALIGN.CENTER);
-  // printer.setFont(FONT.SIZE_5_7);
-  // printer.writeLine('Test');
-  printer.writeLine(await printer.createStringGrid(async (width) => [
+
+  printer.setFont(FONT.SIZE_5_7);
+  printer.writeLine(
+    ['          #           #          #             ',
+      '##  ### ### ###     ### ### # # ### ### ### ###',
+      '# # # # # # ##  ### # # ##  # #  #  ##  #   ###',
+      '# # ### ### ###     ### ###  #   ## ### #   # #'].join('\n'));
+
+  await printer.writeStringGrid(async (width) => [
     printer.createTextTable([
       ['Battery:', await getBattery()],
       ['Temperature:', await getTemperature()]
@@ -30,7 +35,7 @@ async function run () {
       header: true,
       width
     }).write()
-  ], 2));
+  ], 2);
 
   // printer.feedPitchByFont(4);
 

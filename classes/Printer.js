@@ -7,9 +7,10 @@ import {
   getImageSize, getQRCode, rotateCanvas90Deg, splitCanvasInImageDataChunks
 } from '../utils/image.js';
 import { uint8ArrayToBuffer } from '../utils/buffer.js';
-import canvas from 'canvas';
+import font3x5 from '../charFonts/3x5.js';
 import Table from './Table.js';
 import SerialPort from 'serialport';
+import canvas from 'canvas';
 const { Canvas } = canvas;
 
 const buffer = [];
@@ -75,7 +76,7 @@ export default class Printer {
  * @param Number gap Column Gap
  * @returns String
  */
-  async createStringGrid (fnData, columns = 1, gap = 2) {
+  async writeStringGrid (fnData, columns = 1, gap = 2) {
     const width = this.fontWidth * Math.round((this.maxRowChars) / columns - ((columns - 1) * gap) / columns + (this.marginCharsCount / columns));
 
     gap = gap + gap % 2;
@@ -91,12 +92,36 @@ export default class Printer {
     const length = rows.reduce((result, value) => Math.max(value.length, result), 0);
     rows = Array(length).fill(null).map((v, rowIndex) => rows.map((v, index) => rows[index][rowIndex]));
 
-    return rows.map((row) => row.map((v, i) => {
+    return this.writeLine(rows.map((row) => row.map((v, i) => {
       if (i < row.length - 1) {
         return v.padEnd(v.length + gap, ' ');
       }
       return v;
-    }).join('')).join('\n');
+    }).join('')).join('\n'));
+  }
+
+  writeCharFont (printer, string, charMap = font3x5, width = (MAX_DOTS - this.marginCharsCount)) {
+    width = width / printer.fontWidth;
+    width = 1 + Math.round(((width - 3) / 4));
+
+    const rows = Array(Math.ceil((string.length / width))).fill('')
+      .map((v, index) => {
+        return Array.from(string.slice(index * width, index * width + width)).map(c => charMap[c]);
+      });
+
+    const result = rows.reduce((result, chars) => {
+      for (let y = 0; y < 5; y++) {
+        result && (result += '\n');
+        for (let x = 0; x < chars.length; x++) {
+          x && (result += ' ');
+          result += chars[x][y];
+        }
+      }
+      (result += '\n');
+      return result;
+    }, '');
+
+    return this.writeLine(result);
   }
 
   /**

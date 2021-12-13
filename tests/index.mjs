@@ -38,33 +38,39 @@ async function run () {
   // await printer.writeQRCode('https://lammpee.de', null, { width: 120 });
   // console.log('Temperature', await getTemperature());
 
+  printer.setAlign(ALIGN.CENTER);
+  // printer.active = false;
+  printer.setFont(FONT.SIZE_5_7);
+  //
+  // printer.writeLine(Array(80).fill('X').join(''));
+  // printer.writeLine(getText(printer, Object.keys(CHARS).join('')));
+  printer.writeCharFont(printer, 'Lammpee');
+
+  // printer.setMargin(0);
+  // // printer.writeLine('ABCDEF...');
+
+  // printer.writeTextTable([
+  //   ['Battery:', await getBattery()],
+  //   ['Temperature:', await getTemperature()]
+  // ], null, {
+  //   title: 'DevTerm Info',
+  //   border: true,
+  //   header: true,
+  //   width: 1
+  // });
+  // // printer.writeLine('ABCDEF...');
 
 
-  printer.setMargin(0);
-  // printer.writeLine('ABCDEF...');
+  // const tableConfig = [data, columns, {
+  //   // title: 'Table Header',
+  //   border: false,
+  //   header: true,
+  //   footer: true,
+  //   width: 7 / 10
+  // }];
 
-  printer.writeTextTable([
-    ['Battery:', await getBattery()],
-    ['Temperature:', await getTemperature()]
-  ], null, {
-    title: 'DevTerm Info',
-    border: true,
-    header: true,
-    width: 1
-  });
-  // printer.writeLine('ABCDEF...');
-
-
-  const tableConfig = [data, columns, {
-    // title: 'Table Header',
-    border: false,
-    header: true,
-    footer: true,
-    width: 7 / 10
-  }];
-
-  // printer.setFont(FONT.SIZE_5_7);
-  printer.writeTextTable(...tableConfig);
+  // // printer.setFont(FONT.SIZE_5_7);
+  // printer.writeTextTable(...tableConfig);
   printer.reset();
   printer.feedPitchByFont(15);
 }
