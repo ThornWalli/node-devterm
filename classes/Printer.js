@@ -211,6 +211,7 @@ export default class Printer {
       canvas = flipCanvas(canvas, options.flipX, options.flipY);
     }
 
+    // const imageDatas = [ctx.getImageData(0, 0, canvas.width, canvas.height)];
     const imageDatas = await splitCanvasInImageDataChunks(canvas, options.width);
     const write = async (imageData) => {
       const rows = getBitRowsFromImageData(imageData);

@@ -2,10 +2,18 @@
 import { promises } from 'fs';
 import canvas from 'canvas';
 import QRCode from 'qrcode';
-import { MAX_DOTS } from './config.js';
+import { IMAGE_MAX, MAX_DOTS } from './config.js';
 import JsBarcode from 'jsbarcode';
 
+import floydSteinberg from 'floyd-steinberg';
+
 const { createCanvas, loadImage } = canvas;
+
+export const useFloydSteinberg = (canvas) => {
+  const ctx = canvas.getContext('2d');
+  ctx.putImageData(floydSteinberg(ctx.getImageData(0, 0, canvas.width, canvas.height)), 0, 0);
+  return canvas;
+};
 
 /**
  * Get Canvas from Barcode.
@@ -48,7 +56,7 @@ export const getImageSize = (width, height) => {
   const xH = (width / 8) / 256;
   const yL = height % 256;
   const yH = height / 256;
-  const k = (xL + xH * 256) * (yL + yH * 256);
+  const k = (xL + 256 * xH) * (yL + 256 * yH);
   return { xL, xH, yL, yH, k };
 };
 
@@ -60,18 +68,38 @@ export const getImageSize = (width, height) => {
  */
 export const splitCanvasInImageDataChunks = (canvas, width) => {
   canvas = resizeCanvas(canvas, width);
+  canvas = useFloydSteinberg(canvas);
   const ctx = canvas.getContext('2d');
 
-  const { yL } = getImageSize(canvas.width, canvas.height);
-
-  const count = yL / 8 / 2;
+  const { k } = getImageSize(canvas.width, canvas.height);
+  const count = k / (IMAGE_MAX / 2);
   const chunks = [];
   for (let i = 0; i < count; i++) {
-    chunks.push(ctx.getImageData(0, canvas.height / count * i, canvas.width, canvas.height / count));
+    chunks.push(ctx.getImageData(0, (canvas.height / count) * i, canvas.width, canvas.height / count));
   }
   return chunks;
 };
 
+function imageDataToPixelArray (imageData) {
+  const getPixel = (x, y) => {
+    const i = (y * imageData.width + x) * 4;
+    const data = imageData.data;
+    return {
+      r: data[i],
+      g: data[i + 1],
+      b: data[i + 2],
+      a: data[i + 3]
+    };
+  };
+  const pixels = [];
+  for (let y = 0; y < imageData.height; y++) {
+    pixels[y] = pixels[y] || [];
+    for (let x = 0; x < imageData.width; x++) {
+      pixels[y][x] = getPixel(x, y);
+    }
+  }
+  return pixels;
+}
 /**
  * Get 8 bit rows from ImageData.
  * @param ImageData imageData
@@ -80,16 +108,17 @@ export const splitCanvasInImageDataChunks = (canvas, width) => {
 export const getBitRowsFromImageData = (imageData) => {
   const lines = [];
   const { width, height } = imageData;
+  const pixels = imageDataToPixelArray(imageData);
 
   for (let y = 0; y < height; y++) {
     lines[y] = new Uint8Array(width / 8);
     for (let x = 0; x < lines[y].length; x++) {
       lines[y][x] = 0;
       for (let n = 0; n < 8; n++) {
-        const [r, g, b] = getPixel(imageData, (width - 1) - (x * 8 + n), y);
+        const { r, g, b, a } = pixels[y][(width - 1) - (x * 8 + n)];
         const brightness = ((r + g + b) / 3) / 255;
         // only print dark stuff
-        if (brightness < 0.6) {
+        if (brightness < 0.6 || a < 0.6) {
           lines[y][x] += (1 << n);
         }
       }
@@ -174,12 +203,3 @@ export const saveCanvasAsPng = async (canvas, path) => {
   const pngData = await canvas.toBuffer('image/png');
   return promises.writeFile(path, pngData);
 };
-
-export function getPixel (imgData, x, y) {
-  if (y) {
-    return getPixel(imgData, y * imgData.width + x);
-  }
-  const i = x * 4;
-  const d = imgData.data;
-  return [d[i], d[i + 1], d[i + 2], d[i + 3]]; // Returns array [R,G,B,A]
-}

@@ -1,5 +1,5 @@
 import { createPrinter } from '../index.js';
-import { ALIGN, FONT, MAX_DOTS } from '../utils/config.js';
+import { ALIGN, FONT } from '../utils/config.js';
 import { getBattery, getTemperature } from '../utils/devterm.js';
 
 const printer = createPrinter();
