@@ -1,13 +1,13 @@
 
 import { createPrinter } from '../index.js';
-import { ALIGN, IMAGE_MAX, MAX_DOTS, MAX_PIXELS } from '../utils/config.js';
-import { getImageSize } from '../utils/image.js';
-import { getCuby, getTest } from '../utils/stuff.js';
+import { ALIGN } from '../utils/config.js';
+import { getCuby } from '../utils/stuff.js';
 
 const printer = createPrinter();
 
 async function run () {
   printer.setAlign(ALIGN.CENTER);
+  printer.feedPitchByFont(4);
 
   /**
    * Example Canvas
@@ -26,7 +26,7 @@ async function run () {
    * Example Barcode
    * See more: https://github.com/lindell/JsBarcode/wiki/Options
    */
-  await printer.writeBarcode('node-devterm',
+  await printer.writeBarcode('123456789012',
     { format: 'EAN13' }, // QRCode Options
     { width: 300 } // Image Options
   );
@@ -41,7 +41,8 @@ async function run () {
     { width: 256 } // Image Options
   );
 
-  printer.feedPitchByFont(20);
+  printer.feedPitchByFont(10);
+  printer.addCutline();
 }
 
 run();

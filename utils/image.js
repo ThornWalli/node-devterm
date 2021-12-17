@@ -24,8 +24,12 @@ export const useFloydSteinberg = (canvas) => {
  */
 export const getBarcode = (text, options) => {
   const canvas = createCanvas();
-  JsBarcode(canvas, text, options);
-  return canvas;
+  try {
+    JsBarcode(canvas, text, options);
+    return canvas;
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 /**
@@ -129,17 +133,23 @@ export const getBitRowsFromImageData = (imageData) => {
     for (let x = 0; x < lines[y].length; x++) {
       lines[y][x] = 0;
       for (let n = 0; n < 8; n++) {
-        const { r, g, b, a } = pixels[y][(width - 1) - (x * 8 + n)];
+        const { r, g, b, a } = pixels[y][(x * 8 + n)];
         const brightness = ((r + g + b) / 3) / 255;
         // only print dark stuff
         if (brightness < 0.6 || a < 0.6) {
-          lines[y][x] += (1 << n);
+          lines[y][x] |= (1 << 7 - n);
         }
+        // const { r, g, b, a } = pixels[y][(width - 1) - (x * 8 + n)];
+        // const brightness = ((r + g + b) / 3) / 255;
+        // // only print dark stuff
+        // if (brightness < 0.6 || a < 0.6) {
+        //   lines[y][x] += (1 << n);
+        // }
       }
     }
   }
   // bit reverse
-  lines.forEach(line => line.reverse());
+  // lines.forEach(line => line.reverse());
   return lines;
 };
 

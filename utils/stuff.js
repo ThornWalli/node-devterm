@@ -1,13 +1,12 @@
 
 import canvas from 'canvas';
-import { MAX_DOTS } from './config.js';
 import { saveCanvasAsPng } from './image.js';
 const { createCanvas } = canvas;
 
 export const getTest = () => {
-  const width = MAX_DOTS;
-  const height = 20;
-  const offset = 1;
+  const width = 350;
+  const height = 40;
+  const offset = 8;
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext('2d');
   ctx.strokeStyle = '#000';
