@@ -169,10 +169,24 @@ export default class Printer {
     return this.write(ASCII_FF);
   }
 
+  /**
+   * Draw Barcode
+   * @param String text
+   * @param Object barcodeOptions https://github.com/lindell/JsBarcode/wiki/Options
+   * @param Object options
+   * @returns Promise
+   */
   writeBarcode (text, barcodeOptions, options) {
     return this.writeCanvas(getBarcode(text, barcodeOptions), options);
   }
 
+  /**
+   * Draw QRCode
+   * @param String text
+   * @param Object qrCodeOptions https://github.com/soldair/node-qrcode#qr-code-options
+   * @param Object options
+   * @returns Promise
+   */
   async writeQRCode (text, qrCodeOptions, options) {
     qrCodeOptions = qrCodeOptions || {};
     qrCodeOptions.width = qrCodeOptions?.width || options?.width || MAX_DOTS;

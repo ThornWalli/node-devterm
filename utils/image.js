@@ -61,6 +61,18 @@ export const getImageSize = (width, height) => {
 };
 
 /**
+ * Calculate max line height for target height
+ * @param Number width
+ * @param Number height
+ * @returns Number
+ */
+const calculateChunkSize = (width, height) => {
+  const { k } = getImageSize(width, 1);
+  const chunkHeight = IMAGE_MAX / k;
+  return Math.ceil(height / chunkHeight);
+};
+
+/**
  * Split Canvas in ImageData chunks.
  * @param Canvas canvas
  * @param Number width
@@ -71,8 +83,10 @@ export const splitCanvasInImageDataChunks = (canvas, width) => {
   canvas = useFloydSteinberg(canvas);
   const ctx = canvas.getContext('2d');
 
-  const { k } = getImageSize(canvas.width, canvas.height);
-  const count = k / (IMAGE_MAX / 2);
+  // const { k } = getImageSize(canvas.width, canvas.height);
+  // const count = k / (IMAGE_MAX / 2);
+
+  const count = calculateChunkSize(canvas.width, canvas.height);
   const chunks = [];
   for (let i = 0; i < count; i++) {
     chunks.push(ctx.getImageData(0, (canvas.height / count) * i, canvas.width, canvas.height / count));
