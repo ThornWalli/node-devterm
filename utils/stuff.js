@@ -1,7 +1,4 @@
-
-import canvas from 'canvas';
-import { saveCanvasAsPng } from './image.js';
-const { createCanvas } = canvas;
+import { createCanvas, saveCanvasAsPng } from './canvas.js';
 
 export const getTest = () => {
   const width = 350;

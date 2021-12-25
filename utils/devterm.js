@@ -1,4 +1,6 @@
 import fs from 'fs';
+import glob from 'glob';
+import { join } from 'path';
 import SerialPort from 'serialport';
 
 export const SERIAL_PORT_IN = '/tmp/DEVTERM_PRINTER_IN';
@@ -19,7 +21,8 @@ const TempNominal = 25;
 export const getThermalPrinterPort = () => {
   return new SerialPort(SERIAL_PORT_IN, {
     baudRate: 115200,
-    dataBits: 8
+    dataBits: 8,
+    autoOpen: false
   });
 };
 
@@ -37,7 +40,7 @@ export const getBattery = async () => {
   }
 };
 
-export const getTemperature = async () => {
+export const getThermalPrinterTemperature = async () => {
   let Rthermistor = 0; let TempThermistor = 0;
   let ADCSamples = 0;
   let Sample = 1;
@@ -58,4 +61,29 @@ export const getTemperature = async () => {
   TempThermistor = 1 / TempThermistor;
 
   return (TempThermistor - 273.15);
+};
+
+/**
+ * Get temperatures (degree * 1000) from DevTerm A06
+ * @returns Array
+ */
+export const getA06Temperatures = async () => {
+  return (await getThermalZoneDirs()).map(file => Number(fs.readFileSync(join(file, 'temp'), 'utf-8')));
+};
+
+const getThermalZoneDirs = () => {
+  return new Promise(resolve => {
+    glob('/sys/class/thermal/thermal_zone[0-9]/', function (err, files) {
+      if (err) {
+        console.error(err);
+        resolve([]);
+      }
+      files.sort();
+      resolve(files);
+    });
+  });
+};
+
+export const isDevTermA06 = async () => {
+  return (await getThermalZoneDirs()).length > 0;
 };

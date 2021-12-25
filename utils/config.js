@@ -22,6 +22,14 @@ export const FONT = {
   SIZE_7_14: 3
 };
 
+export const MAX_PIXELS_FONT = {
+  [FONT.SIZE_5_7]: 76,
+  [FONT.SIZE_6_12]: 63,
+  [FONT.SIZE_7_14]: 54,
+  [FONT.SIZE_8_16_THIN_1]: 47,
+  [FONT.SIZE_8_16_THIN_2]: 47
+};
+
 export const FONT_WIDTHS = {
   [FONT.SIZE_8_16_THIN_1]: 8,
   [FONT.SIZE_8_16_THIN_2]: 8,

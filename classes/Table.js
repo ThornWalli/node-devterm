@@ -1,4 +1,4 @@
-import { ALIGN, FONT_WIDTHS, MAX_DOTS } from '../utils/config.js';
+import { ALIGN, MAX_DOTS } from '../utils/config.js';
 import { alignValue, clampValue } from '../utils/string.js';
 
 export class TableColumn {
@@ -22,33 +22,43 @@ export default class Table {
       footer: false,
       ...(options || {})
     };
-    this.width = width;
+    this.width = width || 1;
     this.title = title;
     this.border = border;
     this.header = header;
     this.footer = footer;
     this.columns = columns || [];
     this.data = data || [];
+
+    this.borderResultChar = '=';
+    this.borderVerticalChar = '|';
+    this.borderHorizontalChar = '-';
+    this.borderEdgeChar = '+';
   }
 
   get maxChars () {
-    return this.width / this.printer.fontWidth;
+    return (this.width * MAX_DOTS) / this.printer.fontWidth;
   }
 
   get rowLength () {
-    return Math.round(
-      Math.min(
-        (this.maxChars - 1),
-        Math.floor(this.maxChars - this.printer.marginCharsCount)
-      )
-    );
+    const value = Math.round(Math.min(this.printer.maxRowChars - this.printer.marginCharsCount, this.maxChars));
+
+    return value;
+    // return Math.round((this.maxChars - 1) - this.printer.marginCharsCount);
+    // return Math.round(
+    //   Math.min(
+    //     (this.maxChars - 1) + this.printer.marginCharsCount,
+    //     Math.floor((MAX_DOTS / this.printer.fontWidth) - this.printer.marginCharsCount)
+    //   ) - this.printer.marginCharsCount
+    // );
   }
 
   get columnLength () {
     let count = this.rowLength;
 
+    count -= (this.columns.length - 1);
     if (this.border) {
-      count -= (this.columns.length - 1) + 2;
+      count -= 2;
     }
 
     count /= this.columns.length;
@@ -80,14 +90,14 @@ export default class Table {
     if (this.title) {
       if (this.border) {
         rows.push(
-          this.filledRow(this.rowLength, '-'),
-       `|${alignValue(ALIGN.CENTER, clampValue(this.title, this.rowLength - 2), this.rowLength - 2, ' ')}|`
+          this.filledRow(this.rowLength, this.borderHorizontalChar),
+       `${this.borderVerticalChar}${alignValue(ALIGN.CENTER, clampValue(this.title, this.rowLength - 2), this.rowLength - 2, ' ')}${this.borderVerticalChar}`
         );
       } else {
         rows.push(this.columnCenter(this.title, this.rowLength, ' '));
       }
     }
-    this.border && rows.push(this.filledRow(this.rowLength, '-'));
+    this.border && rows.push(this.filledRow(this.rowLength, this.borderHorizontalChar));
 
     const columnTitles = this.columns.map((column) => column.title);
     if (columnTitles.filter(Boolean).length) {
@@ -114,22 +124,13 @@ export default class Table {
     return rows;
   }
 
-  writeRow (row, fill) {
+  writeRow (row, fill, border = this.borderVerticalChar) {
     const defaultPadSize = Math.floor(this.columnLength);
     const offsets = Array(this.columns.length).fill(0);
     let offset = Math.round((this.columnLength - defaultPadSize) * this.columns.length);
 
     const i = [0, 0];
     while (offset) {
-      // if (
-      //   offset % 2 === 0
-      // ) {
-      //   offsets[(offsets.length - 1) - i[0]]++;
-      //   i[1]++;
-      // } else {
-      //   offsets[i[0]]++;
-      //   i[0]++;
-      // }
       offsets[i[0]]++;
       i[0]++;
       offset--;
@@ -141,10 +142,10 @@ export default class Table {
       let padSize = defaultPadSize;
       padSize += offsets[index];
       return alignValue(column.align, clampValue(value, padSize), padSize, spacer);
-    }).join(this.border ? '|' : '');
+    }).join(this.border ? this.borderVerticalChar : ' ');
 
     if (this.border) {
-      return `|${content}|`;
+      return `${border}${content}${border}`;
     } else {
       return content;
     }
@@ -154,16 +155,16 @@ export default class Table {
     let border = '';
     if (this.border) {
       length -= 2;
-      border = '|';
+      border = this.borderEdgeChar;
     }
     return `${border}${''.padStart(length, char[0])}${border}`;
   }
 
   getResultLine () {
-    return this.writeRow([], '=');
+    return this.writeRow([], this.borderResultChar, this.borderEdgeChar);
   }
 
   getHorizontalLine () {
-    return this.writeRow([], '-');
+    return this.writeRow([], this.borderHorizontalChar, this.borderEdgeChar);
   }
 }

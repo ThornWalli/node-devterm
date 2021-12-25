@@ -1,11 +1,6 @@
-/* eslint-disable no-debugger */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-multiple-empty-lines */
-import { join, resolve } from 'path';
-import { createPrinter, TableColumn } from '../index.js';
-import { ALIGN, IMAGE_MAX, ASCII_GS, ASCII_TAB, FONT, UNDERLINE, ASCII_ESC, ASCII_LF, ASCII_FF, MAX_PIXELS, MAX_DOTS, FONT_WIDTHS, ASCII_DC2 } from '../utils/config.js';
-import { getBattery, getTemperature, readAdc } from '../utils/devterm.js';
-const __dirname = resolve();
+import { createPrinter, getA06Temperatures, getBattery, getThermalPrinterTemperature, isDevTermA06 } from '../index.js';
+import { ALIGN } from '../utils/config.js';
+import { writePageTitle } from './utils.js';
 
 const printer = createPrinter();
 
@@ -13,66 +8,36 @@ async function run () {
   // fonts
   printer.reset();
 
-
-  // printer.writeLine(Array(MAX_PIXELS).fill('X').join(''));
-  const columns = [
-    // new TableColumn(ALIGN.LEFT),
-    // new TableColumn(ALIGN.CENTER),
-    // new TableColumn(ALIGN.RIGHT),
-    // new TableColumn(ALIGN.RIGHT),
-    // new TableColumn(ALIGN.RIGHT),
-    // new TableColumn(ALIGN.RIGHT),
-    // new TableColumn(ALIGN.RIGHT)
-    new TableColumn('Col. A', ALIGN.CENTER),
-    new TableColumn('Col. B', ALIGN.LEFT),
-    new TableColumn('Col. C', ALIGN.CENTER),
-    new TableColumn('Col. D', ALIGN.LEFT)
-    // new TableColumn('Col. E', ALIGN.LEFT)
-  ];
-
-  const data = Array(3).fill(0).map((v, index_) =>
-    Array(columns.length).fill(0).map((v, index) => ''.padStart(10, index)));
-
-  // printer.testPage();
-  // console.log('Battery', await getBattery());
-  // await printer.writeQRCode('https://lammpee.de', null, { width: 120 });
-  // console.log('Temperature', await getTemperature());
+  writePageTitle(printer, 'node-devterm');
 
   printer.setAlign(ALIGN.CENTER);
-  // printer.active = false;
-  printer.setFont(FONT.SIZE_5_7);
-  //
-  // printer.writeLine(Array(80).fill('X').join(''));
-  // printer.writeLine(getText(printer, Object.keys(CHARS).join('')));
-  printer.writeCharFont(printer, 'Lammpee');
 
-  // printer.setMargin(0);
-  // // printer.writeLine('ABCDEF...');
+  await printer.writeImage('img/devterm.jpeg', { width: 128 });
 
-  // printer.writeTextTable([
-  //   ['Battery:', await getBattery()],
-  //   ['Temperature:', await getTemperature()]
-  // ], null, {
-  //   title: 'DevTerm Info',
-  //   border: true,
-  //   header: true,
-  //   width: 1
-  // });
-  // // printer.writeLine('ABCDEF...');
+  printer.feedPitchByFont(4);
 
+  printer.writeTextTable([
+    ['Type:', (await isDevTermA06()) ? 'A06' : '???'],
+    ['Battery:', (await getBattery()) + ' %'],
+    ['Printer Temp.:', (await getThermalPrinterTemperature()).toFixed(2) + ' C'],
+    ...(await getA06Temperatures()).map((temp, i) => [`Temp. Zone ${i + 1}:`, (temp / 1000).toFixed(2) + ' C'])
+  ], null, {
+    title: 'DevTerm Info',
+    border: true,
+    header: true,
+    width: 6 / 8
+  });
 
-  // const tableConfig = [data, columns, {
-  //   // title: 'Table Header',
-  //   border: false,
-  //   header: true,
-  //   footer: true,
-  //   width: 7 / 10
-  // }];
+  printer.feedPitchByFont(4);
 
-  // // printer.setFont(FONT.SIZE_5_7);
-  // printer.writeTextTable(...tableConfig);
+  await printer.writeQRCode('https://github.com/ThornWalli/node-devterm',
+    { errorCorrectionLevel: 'H' },
+    { width: 128 }
+  );
+
   printer.reset();
-  printer.feedPitchByFont(15);
+  printer.feedPitchByFont(14);
+  printer.addCutline();
 }
 
 run();

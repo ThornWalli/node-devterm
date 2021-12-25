@@ -1,17 +1,25 @@
+
+import SerialPort from 'serialport';
+
 import {
   getDefaultConfig, ALIGN, ASCII_DC2, ASCII_ESC, ASCII_GS, FONT,
-  IMAGE_MAX, MAX_DENSITY, MAX_DOTS, UNDERLINE, FONT_WIDTHS, ASCII_FF
+  IMAGE_MAX, MAX_DENSITY, MAX_DOTS, UNDERLINE, FONT_WIDTHS, ASCII_FF, MAX_PIXELS_FONT
 } from '../utils/config.js';
 import {
-  flipCanvas, getBarcode, getBitRowsFromImageData, getCanvasFromImage,
-  getImageSize, getQRCode, rotateCanvas90Deg, splitCanvasInImageDataChunks
+  get8BitRowsFromImageData, getImageSize,
+  splitCanvasInImageDataChunks
 } from '../utils/image.js';
 import { uint8ArrayToBuffer } from '../utils/buffer.js';
 import font3x5 from '../charFonts/3x5.js';
 import Table from './Table.js';
-import SerialPort from 'serialport';
-import canvas from 'canvas';
-const { Canvas } = canvas;
+import {
+  getBarcode, getCanvasFromImage,
+  getQRCode, prepareCanvasForPrint
+} from '../utils/canvas.js';
+
+import Consola from 'consola';
+
+const consola = Consola.withTag('printer');
 
 const buffer = [];
 
@@ -21,18 +29,34 @@ const WRITE_DEFAULTS = {
 };
 
 export default class Printer {
-  constructor (port) {
-    if (!(port instanceof SerialPort)) {
+  constructor (serialPort) {
+    if (!(serialPort instanceof SerialPort)) {
       throw new Error('SerialPort is missing!');
     }
-    this.debug = true;
+    this.debug = false;
     this.active = true;
     // ###
     this.config = getDefaultConfig();
-    this.port = port;
-    this.port.on('error', function (err) {
+    this.serialPort = serialPort;
+    this.serialPort.on('error', function (err) {
       throw err;
     });
+  }
+
+  async connect () {
+    await new Promise(resolve => {
+      this.debug && consola.info('Connect to Printer');
+      this.serialPort.open(resolve);
+    });
+    this.connected = true;
+  }
+
+  async disconnect () {
+    await new Promise(resolve => {
+      this.debug && consola.info('Disconnect from Printer');
+      this.serialPort.close(resolve);
+    });
+    this.connected = false;
   }
 
   get fontWidth () {
@@ -44,7 +68,7 @@ export default class Printer {
   }
 
   get maxRowChars () {
-    return MAX_DOTS / this.fontWidth;
+    return MAX_PIXELS_FONT[this.config.font];
   }
 
   stdoutOverride (options) {
@@ -69,39 +93,13 @@ export default class Printer {
   }
 
   /**
- * Create String Grid
- * @param Printer printer
- * @param Function fnData
- * @param Number columns
- * @param Number gap Column Gap
- * @returns String
- */
-  async writeStringGrid (fnData, columns = 1, gap = 2) {
-    const width = this.fontWidth * Math.round((this.maxRowChars) / columns - ((columns - 1) * gap) / columns + (this.marginCharsCount / columns));
-
-    gap = gap + gap % 2;
-    const data = await fnData(width);
-    if (data.length > columns) {
-      throw new Error('More Data Columns as defined columns');
-    }
-    let rows = data.reduce((result, value, column) => {
-      value.split('\n').forEach((v, i) => (result[column][i] = v));
-      return result;
-    }, Array(data.length).fill(null).map(Array));
-
-    const length = rows.reduce((result, value) => Math.max(value.length, result), 0);
-    rows = Array(length).fill(null).map((v, rowIndex) => rows.map((v, index) => rows[index][rowIndex]));
-
-    return this.writeLine(rows.map((row) => row.map((v, i) => {
-      if (i < row.length - 1) {
-        return v.padEnd(v.length + gap, ' ');
-      }
-      return v;
-    }).join('')).join('\n'));
-  }
-
-  writeCharFont (printer, string, charMap = font3x5, width = (MAX_DOTS - this.marginCharsCount)) {
-    width = width / printer.fontWidth;
+   * Write Text from CharMap.
+   * @param String string
+   * @param Array charMap
+   * @param Number width
+   * @returns Promise
+   */
+  writeCharFont (string, charMap = font3x5, width = (this.maxRowChars - this.marginCharsCount)) {
     width = 1 + Math.round(((width - 3) / 4));
 
     const rows = Array(Math.ceil((string.length / width))).fill('')
@@ -125,31 +123,45 @@ export default class Printer {
   }
 
   /**
+   * Send Buffe/String to printer.
    * @param {Buffer|String} value
    * @returns Promise
    */
   write (value) {
-    if (!this.active) { return; }
     return new Promise((resolve, reject) => {
-      buffer.push(() => this.port.write(value, (err) => {
-        if (err) {
-          reject(err);
+      buffer.push(() => {
+        this.debug && consola.info('Write to Printer', value);
+        if (this.active) {
+          return (new Promise((resolve, reject) => {
+            this.serialPort.write(value, (err) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve();
+              }
+            });
+          })).then(resolve).catch(reject);
         } else {
           resolve();
         }
-      }));
-      !this.running && this.executeBuffer();
+      });
+      !this.running && (this.executeBuffer());
     });
   }
 
-  executeBuffer () {
+  async executeBuffer () {
+    this.running = true;
+    !this.connected && (await this.connect());
     if (buffer.length) {
-      this.running = true;
-      global.setTimeout(async () => {
-        await buffer.shift()();
-        this.executeBuffer();
-      }, 50);
-    } else { this.running = false; }
+      await buffer.shift()();
+      return this.executeBuffer();
+    } else {
+      this.running = false;
+      global.clearTimeout(this.timeout);
+      this.timeout = global.setTimeout(async () => {
+        await this.disconnect();
+      }, 1000);
+    }
   }
 
   /**
@@ -158,15 +170,21 @@ export default class Printer {
    */
   writeLine (value) {
     if (this.debug) {
-      const margin = this.config.margin[0];
-      const chars = Math.round((MAX_DOTS / FONT_WIDTHS[this.config.font]) - 1 - margin / FONT_WIDTHS[this.config.font]);
-      for (let i = 0; i < value.length / chars; i++) {
-        const line = ''.padStart(margin / FONT_WIDTHS[this.config.font], ' ') + value.slice(i * chars, i * chars + chars);
-        console.log(line);
-      }
+      value.split('\n').forEach(value => {
+        const margin = this.config.margin[0];
+        const chars = Math.round((MAX_DOTS / FONT_WIDTHS[this.config.font]) - 1 - margin / FONT_WIDTHS[this.config.font]);
+        for (let i = 0; i < value.length / chars; i++) {
+          const line = ''.padStart(margin / FONT_WIDTHS[this.config.font], ' ') + value.slice(i * chars, i * chars + chars);
+          console.log(line);
+        }
+      });
     }
-    this.write(Buffer.from(`${value}`));
-    return this.write(ASCII_FF);
+    value.split('\n').forEach(value => {
+      this.write(Buffer.from(`${value}`));
+      this.write(ASCII_FF);
+    });
+
+    // return this.write(ASCII_FF);
   }
 
   /**
@@ -195,13 +213,13 @@ export default class Printer {
   }
 
   /**
-   * Write  Image from path or url, with optional width.
+   * Write Image from path or url, with optional width.
    * @param String url
    * @param Number width
    * @returns Promise
    */
-  async writeImage (url, options) {
-    return this.writeCanvas(await getCanvasFromImage(url), options);
+  async writeImage (url, options = {}) {
+    return this.writeCanvas(await getCanvasFromImage(url), { grayscale: true, ...options });
   }
 
   /**
@@ -211,24 +229,11 @@ export default class Printer {
    * @returns Promise
    */
   async writeCanvas (canvas, options) {
-    options = { width: null, rotate: false, flipX: false, flipY: false, ...options };
+    canvas = prepareCanvasForPrint(canvas, options);
 
-    if (!(canvas instanceof Canvas)) {
-      throw new Error('canvas is not instance of Canvas');
-    }
-
-    if (options.rotate) {
-      canvas = rotateCanvas90Deg(canvas);
-    }
-
-    if (options.flipX || options.flipY) {
-      canvas = flipCanvas(canvas, options.flipX, options.flipY);
-    }
-
-    // const imageDatas = [ctx.getImageData(0, 0, canvas.width, canvas.height)];
-    const imageDatas = await splitCanvasInImageDataChunks(canvas, options.width);
+    const imageDatas = await splitCanvasInImageDataChunks(canvas);
     const write = async (imageData) => {
-      const rows = getBitRowsFromImageData(imageData);
+      const rows = get8BitRowsFromImageData(imageData);
       await this.writeBuffer(getWriteImageCommand(imageData.width, imageData.height));
       let pipe = Promise.resolve();
       for (let y = 0; y < rows.length; y++) {
@@ -242,7 +247,7 @@ export default class Printer {
   }
 
   /**
-   * @param {Array} value
+   * @param Array value
    * @returns Promise
    */
   writeBuffer (value) {
@@ -278,12 +283,12 @@ export default class Printer {
   }
 
   /**
-   * Set Margin.
+   * Set Margin by percentage. (0-1)
    * @param Number value
    * @returns Promise
    */
   setMargin (value) {
-    const n = posInt(value) * FONT_WIDTHS[this.config.font];
+    const n = Math.abs(value) * this.maxRowChars * FONT_WIDTHS[this.config.font] * 8;
     this.config.margin = [(n / 8) % 256, (n / 8) / 256];
     const [nL, nH] = this.config.margin;
     return this.writeBuffer([ASCII_GS, 0x4c, nL, nH]);
@@ -357,7 +362,7 @@ export default class Printer {
    * @returns Promise
    */
   setLineSpace (value) {
-    this.config.lineSpace = posInt(value.value) % 3;
+    this.config.lineSpace = value;
     return this.writeBuffer([ASCII_ESC, 0x33, this.config.lineSpace]);
   }
 
