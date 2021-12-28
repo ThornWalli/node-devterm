@@ -64,11 +64,16 @@ export const getThermalPrinterTemperature = async () => {
 };
 
 /**
- * Get temperatures (degree * 1000) from DevTerm A06
- * @returns Array
+ * Get temperatures from DevTerm.
+ * CM3 is missing
+ * @returns Promise
  */
-export const getA06Temperatures = async () => {
-  return (await getThermalZoneDirs()).map(file => Number(fs.readFileSync(join(file, 'temp'), 'utf-8')));
+export const getTemperatures = async () => {
+  if (isDevTermA06()) {
+    return Promise.all((await getThermalZoneDirs()).map(async (file) => Number(await fs.promises.readFile(join(file, 'temp'), 'utf-8')) / 1000));
+  } else {
+    return [];
+  }
 };
 
 const getThermalZoneDirs = () => {

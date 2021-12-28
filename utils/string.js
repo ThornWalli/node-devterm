@@ -1,4 +1,4 @@
-import { ALIGN } from './config.js';
+import { ALIGN } from '../config.js';
 
 export const alignValue = (align, value, size, spacer) => {
   switch (align) {

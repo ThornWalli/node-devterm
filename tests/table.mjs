@@ -1,5 +1,5 @@
 import { createPrinter, TableColumn } from '../index.js';
-import { ALIGN, FONT } from '../utils/config.js';
+import { ALIGN, FONT } from '../config.js';
 import { writeHeadline, writePageTitle } from './utils.js';
 
 const printer = createPrinter();
@@ -39,7 +39,7 @@ async function run () {
     ['Total Value', (2 + 4 + 8 + 16 + 32 + 64)]
   ], [
     new TableColumn('Item'),
-    new TableColumn('Value', ALIGN.CENTER)
+    new TableColumn('Value', { align: ALIGN.CENTER })
   ], {
     title: 'The table title',
     border: true,
@@ -60,8 +60,8 @@ async function run () {
     ['B', 4],
     ['C', 8]
   ], [
-    new TableColumn('Item', ALIGN.CENTER),
-    new TableColumn('Value', ALIGN.CENTER)
+    new TableColumn('Item', { align: ALIGN.CENTER }),
+    new TableColumn('Value', { align: ALIGN.CENTER })
   ], {
     border: true,
     width: 4 / 6
@@ -83,8 +83,8 @@ async function run () {
     ['B', '3.75 $'],
     ['C', '4.80 $']
   ], [
-    new TableColumn('Item', ALIGN.LEFT),
-    new TableColumn('Value', ALIGN.RIGHT)
+    new TableColumn('Item', { align: ALIGN.LEFT }),
+    new TableColumn('Value', { align: ALIGN.RIGHT })
   ], {
     border: false
   });

@@ -1,10 +1,16 @@
-import { ALIGN, MAX_DOTS } from '../utils/config.js';
+import { ALIGN, MAX_DOTS } from '../config.js';
 import { alignValue, clampValue } from '../utils/string.js';
 
 export class TableColumn {
-  constructor (title, align, fill) {
+  /**
+   * @param String title
+   * @param Object options
+   */
+  constructor (title, options = {}) {
+    const { align, width, fill } = options;
     this.title = title;
     this.align = align || ALIGN.LEFT;
+    this.width = width || 1;
     this.fill = fill || ' ';
   }
 }
@@ -94,7 +100,7 @@ export default class Table {
        `${this.borderVerticalChar}${alignValue(ALIGN.CENTER, clampValue(this.title, this.rowLength - 2), this.rowLength - 2, ' ')}${this.borderVerticalChar}`
         );
       } else {
-        rows.push(this.columnCenter(this.title, this.rowLength, ' '));
+        rows.push(alignValue(ALIGN.CENTER, this.title, this.rowLength, ' '));
       }
     }
     this.border && rows.push(this.filledRow(this.rowLength, this.borderHorizontalChar));

@@ -1,4 +1,4 @@
-import { IMAGE_MAX } from './config.js';
+import { IMAGE_MAX } from '../config.js';
 
 export const getImageSize = (width, height) => {
   const xL = (width / 8) % 256;
@@ -27,11 +27,8 @@ const calculateChunkSize = (width, height) => {
  * @param Number width
  * @returns Array
  */
-export const splitCanvasInImageDataChunks = (canvas, width) => {
+export const splitCanvasInImageDataChunks = (canvas) => {
   const ctx = canvas.getContext('2d');
-
-  // const { k } = getImageSize(canvas.width, canvas.height);
-  // const count = k / (IMAGE_MAX / 2);
 
   const count = calculateChunkSize(canvas.width, canvas.height);
   const chunks = [];

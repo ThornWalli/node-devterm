@@ -4,7 +4,7 @@ import SerialPort from 'serialport';
 import {
   getDefaultConfig, ALIGN, ASCII_DC2, ASCII_ESC, ASCII_GS, FONT,
   IMAGE_MAX, MAX_DENSITY, MAX_DOTS, UNDERLINE, FONT_WIDTHS, ASCII_FF, MAX_PIXELS_FONT
-} from '../utils/config.js';
+} from '../config.js';
 import {
   get8BitRowsFromImageData, getImageSize,
   splitCanvasInImageDataChunks
@@ -124,7 +124,7 @@ export default class Printer {
 
   /**
    * Send Buffe/String to printer.
-   * @param {Buffer|String} value
+   * @param Buffer|String value
    * @returns Promise
    */
   write (value) {
@@ -165,6 +165,7 @@ export default class Printer {
   }
 
   /**
+   * Prints a String.
    * @param String value
    * @returns Promise
    */
@@ -188,7 +189,7 @@ export default class Printer {
   }
 
   /**
-   * Draw Barcode
+   * Prints a Barcode. Uses `jsbarcode` for generating.
    * @param String text
    * @param Object barcodeOptions https://github.com/lindell/JsBarcode/wiki/Options
    * @param Object options
@@ -199,7 +200,7 @@ export default class Printer {
   }
 
   /**
-   * Draw QRCode
+   * Prints a QRCode. Uses `node-qrcode` for generating.
    * @param String text
    * @param Object qrCodeOptions https://github.com/soldair/node-qrcode#qr-code-options
    * @param Object options
@@ -230,8 +231,15 @@ export default class Printer {
    */
   async writeCanvas (canvas, options) {
     canvas = prepareCanvasForPrint(canvas, options);
+    return this.writeImageDataList(await splitCanvasInImageDataChunks(canvas));
+  }
 
-    const imageDatas = await splitCanvasInImageDataChunks(canvas);
+  /**
+   * Prints a list of ImageData.
+   * @param Arrar imageDatas List of ImageDatas with max Size.
+   * @returns Promise
+   */
+  async writeImageDataList (imageDataList) {
     const write = async (imageData) => {
       const rows = get8BitRowsFromImageData(imageData);
       await this.writeBuffer(getWriteImageCommand(imageData.width, imageData.height));
@@ -243,7 +251,7 @@ export default class Printer {
       return pipe;
     };
 
-    return imageDatas.reduce((result, imageData) => result.then(() => write(imageData)), Promise.resolve());
+    return imageDataList.reduce((result, imageData) => result.then(() => write(imageData)), Promise.resolve());
   }
 
   /**
@@ -332,7 +340,7 @@ export default class Printer {
    * Left:   0
    * Center: 1
    * Right:  2
-   * @param <Number> value
+   * @param Number value
    * @returns Promise
    */
   setAlign (value) {
@@ -349,7 +357,7 @@ export default class Printer {
 
   /**
    * TODO: Was passiert hier?
-   * @param <Number> value 1, 2, 3
+   * @param Number value 1, 2, 3
    * @returns Promise
    */
   setUnderLine (value) {
@@ -358,7 +366,7 @@ export default class Printer {
   }
 
   /**
-   * @param <Number> value 1, 2, 3
+   * @param Number value 1, 2, 3
    * @returns Promise
    */
   setLineSpace (value) {

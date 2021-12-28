@@ -1,6 +1,8 @@
-import { ALIGN, FONT } from '../utils/config.js';
+import { ALIGN, FONT } from '../config.js';
 
 export const writePageTitle = (printer, text) => {
+  printer.reset();
+  printer.feedPitchByFont(4);
   printer.setAlign(ALIGN.CENTER);
   printer.setFont(FONT.SIZE_5_7);
   printer.writeCharFont(text);

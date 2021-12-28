@@ -5,7 +5,7 @@ import QRCode from 'qrcode';
 import JsBarcode from 'jsbarcode';
 import floydSteinberg from 'floyd-steinberg';
 
-import { MAX_DOTS } from './config.js';
+import { MAX_DOTS } from '../config.js';
 
 const { createCanvas, loadImage, Canvas } = canvas;
 
@@ -47,7 +47,7 @@ export const canvasToImageData = (canvas) => {
 
 /**
  * Get Canvas from image file.
- * @param String path
+ * @param String|Buffer path
  * @param Number width
  * @returns Canvas
  */
