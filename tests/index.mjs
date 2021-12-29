@@ -2,8 +2,6 @@ import { createPrinter, getTemperatures, getBattery, getThermalPrinterTemperatur
 import { ALIGN } from '../config.js';
 import { writeHeadline, writePageTitle } from './utils.js';
 
-import fs from 'fs';
-
 const printer = createPrinter();
 
 async function run () {
