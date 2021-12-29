@@ -296,9 +296,9 @@ export default class Printer {
    * @returns Promise
    */
   setMargin (value) {
+    this.config.margin = value;
     const n = Math.abs(value) * this.maxRowChars * FONT_WIDTHS[this.config.font] * 8;
-    this.config.margin = [(n / 8) % 256, (n / 8) / 256];
-    const [nL, nH] = this.config.margin;
+    const [nL, nH] = [(n / 8) % 256, (n / 8) / 256];
     return this.writeBuffer([ASCII_GS, 0x4c, nL, nH]);
   }
 
@@ -330,9 +330,9 @@ export default class Printer {
    * @param Number value
    * @returns Promise
    */
-  setWordgap (value) {
-    this.config.wordgap = posInt(value);
-    return this.writeBuffer([ASCII_ESC, 0x20, this.config.wordgap]);
+  setWordGap (value) {
+    this.config.wordGap = posInt(value);
+    return this.writeBuffer([ASCII_ESC, 0x20, this.config.wordGap]);
   }
 
   /**
@@ -366,7 +366,7 @@ export default class Printer {
   }
 
   /**
-   * @param Number value 1, 2, 3
+   * @param Number value
    * @returns Promise
    */
   setLineSpace (value) {
@@ -375,10 +375,10 @@ export default class Printer {
   }
 
   /**
-   * Add cutline.
+   * Add cut line.
    * @returns Promise
    */
-  addCutline (value) {
+  addCutLine (value) {
     return this.writeBuffer([ASCII_GS, 0x56, value]);
   }
 

@@ -38,6 +38,14 @@ export const FONT_WIDTHS = {
   [FONT.SIZE_5_7]: 5
 };
 
+export const FONT_HEIGHTS = {
+  [FONT.SIZE_8_16_THIN_1]: 16,
+  [FONT.SIZE_8_16_THIN_2]: 16,
+  [FONT.SIZE_7_14]: 14,
+  [FONT.SIZE_6_12]: 12,
+  [FONT.SIZE_5_7]: 7
+};
+
 export const ALIGN = {
   LEFT: 0, CENTER: 1, RIGHT: 2
 };
@@ -55,12 +63,13 @@ export const ERROR = {
 // defaults
 export const getDefaultConfig = () => {
   return {
+    align: ALIGN.LEFT,
     font: FONT.SIZE_8_16_THIN_1,
-    margin: [0, 0],
+    margin: 0,
     underline: 0,
     lineSpace: 0,
-    dennsity: 6,
+    density: 6,
     underLine: 0,
-    wordgap: 0
+    wordGap: 0
   };
 };

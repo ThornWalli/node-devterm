@@ -95,7 +95,7 @@ async function run () {
 
   printer.reset();
   printer.feedPitchByFont(15);
-  printer.addCutline();
+  printer.addCutLine();
 }
 
 run();

@@ -107,7 +107,7 @@ https://github.com/clockworkpi/DevTerm/blob/ed9ab854c551e2002c9240eaa68bf91a108d
 
 ### setDensity
 https://github.com/clockworkpi/DevTerm/blob/ed9ab854c551e2002c9240eaa68bf91a108d3355/Code/thermal_printer/devterm_thermal_printer.c#L524
-### setWordgap
+### setWordGap
 https://github.com/clockworkpi/DevTerm/blob/ed9ab854c551e2002c9240eaa68bf91a108d3355/Code/thermal_printer/devterm_thermal_printer.c#L514
 ### setUnderLine
 https://github.com/clockworkpi/DevTerm/blob/ed9ab854c551e2002c9240eaa68bf91a108d3355/Code/thermal_printer/devterm_thermal_printer.c#L497
@@ -122,7 +122,7 @@ https://github.com/clockworkpi/DevTerm/blob/ed9ab854c551e2002c9240eaa68bf91a108d
 ### feedPitchByFont
 https://github.com/clockworkpi/DevTerm/blob/ed9ab854c551e2002c9240eaa68bf91a108d3355/Code/thermal_printer/devterm_thermal_printer.c#L450
 
-### addCutline
+### addCutLine
 https://github.com/clockworkpi/DevTerm/blob/ed9ab854c551e2002c9240eaa68bf91a108d3355/Code/thermal_printer/devterm_thermal_printer.c#L532
 
 ### testPage
