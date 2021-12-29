@@ -30,20 +30,12 @@ export const MAX_PIXELS_FONT = {
   [FONT.SIZE_8_16_THIN_2]: 47
 };
 
-export const FONT_WIDTHS = {
-  [FONT.SIZE_8_16_THIN_1]: 8,
-  [FONT.SIZE_8_16_THIN_2]: 8,
-  [FONT.SIZE_7_14]: 7,
-  [FONT.SIZE_6_12]: 6,
-  [FONT.SIZE_5_7]: 5
-};
-
-export const FONT_HEIGHTS = {
-  [FONT.SIZE_8_16_THIN_1]: 16,
-  [FONT.SIZE_8_16_THIN_2]: 16,
-  [FONT.SIZE_7_14]: 14,
-  [FONT.SIZE_6_12]: 12,
-  [FONT.SIZE_5_7]: 7
+export const FONT_DIMENSIONS = {
+  [FONT.SIZE_8_16_THIN_1]: [8, 16],
+  [FONT.SIZE_8_16_THIN_2]: [8, 16],
+  [FONT.SIZE_7_14]: [7, 14],
+  [FONT.SIZE_6_12]: [6, 12],
+  [FONT.SIZE_5_7]: [5, 7]
 };
 
 export const ALIGN = {

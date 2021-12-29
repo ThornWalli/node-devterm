@@ -3,7 +3,7 @@ import SerialPort from 'serialport';
 
 import {
   getDefaultConfig, ALIGN, ASCII_DC2, ASCII_ESC, ASCII_GS, FONT,
-  IMAGE_MAX, MAX_DENSITY, MAX_DOTS, UNDERLINE, FONT_WIDTHS, ASCII_FF, MAX_PIXELS_FONT
+  IMAGE_MAX, MAX_DENSITY, MAX_DOTS, UNDERLINE, ASCII_FF, MAX_PIXELS_FONT, FONT_DIMENSIONS
 } from '../config.js';
 import {
   get8BitRowsFromImageData, getImageSize,
@@ -60,11 +60,15 @@ export default class Printer {
   }
 
   get fontWidth () {
-    return FONT_WIDTHS[this.config.font];
+    return FONT_DIMENSIONS[this.config.font][0];
+  }
+
+  get fontHeight () {
+    return FONT_DIMENSIONS[this.config.font][1];
   }
 
   get marginCharsCount () {
-    return (this.config.margin[0] / this.fontWidth);
+    return ((this.config.margin * MAX_DOTS) / this.fontWidth);
   }
 
   get maxRowChars () {
@@ -108,7 +112,7 @@ export default class Printer {
       });
 
     const result = rows.reduce((result, chars) => {
-      for (let y = 0; y < 5; y++) {
+      for (let y = 0; y < charMap[0].length; y++) {
         result && (result += '\n');
         for (let x = 0; x < chars.length; x++) {
           x && (result += ' ');
@@ -172,10 +176,10 @@ export default class Printer {
   writeLine (value) {
     if (this.debug) {
       value.split('\n').forEach(value => {
-        const margin = this.config.margin[0];
-        const chars = Math.round((MAX_DOTS / FONT_WIDTHS[this.config.font]) - 1 - margin / FONT_WIDTHS[this.config.font]);
+        const margin = this.config.margin * MAX_DOTS;
+        const chars = Math.round((MAX_DOTS / this.fontWidth) - 1 - margin / this.fontWidth);
         for (let i = 0; i < value.length / chars; i++) {
-          const line = ''.padStart(margin / FONT_WIDTHS[this.config.font], ' ') + value.slice(i * chars, i * chars + chars);
+          const line = ''.padStart(margin / this.fontWidth, ' ') + value.slice(i * chars, i * chars + chars);
           console.log(line);
         }
       });
@@ -297,7 +301,7 @@ export default class Printer {
    */
   setMargin (value) {
     this.config.margin = value;
-    const n = Math.abs(value) * this.maxRowChars * FONT_WIDTHS[this.config.font] * 8;
+    const n = Math.abs(value) * this.maxRowChars * this.fontWidth * 8;
     const [nL, nH] = [(n / 8) % 256, (n / 8) / 256];
     return this.writeBuffer([ASCII_GS, 0x4c, nL, nH]);
   }
@@ -378,8 +382,14 @@ export default class Printer {
    * Add cut line.
    * @returns Promise
    */
-  addCutLine (value) {
-    return this.writeBuffer([ASCII_GS, 0x56, value]);
+  async addCutLine (value) {
+    // fix margin, wordGap
+    const { margin, wordGap } = this.config;
+    this.setMargin(0);
+    this.setWordGap(0);
+    this.writeBuffer([ASCII_GS, 0x56, value]);
+    this.setMargin(margin);
+    return this.setWordGap(wordGap);
   }
 
   /**
