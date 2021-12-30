@@ -14,10 +14,6 @@ export { createCanvas, Canvas };
 export const prepareCanvasForPrint = (canvas, options) => {
   options = { width: null, rotate: false, flipX: false, flipY: false, grayscale: false, ...options };
 
-  if (!(canvas instanceof Canvas)) {
-    throw new Error('canvas is not instance of Canvas');
-  }
-
   if (options.rotate) {
     canvas = rotateCanvas90Deg(canvas);
   }
