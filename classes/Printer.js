@@ -383,13 +383,15 @@ export default class Printer {
    * @returns Promise
    */
   async addCutLine (value) {
-    // fix margin, wordGap
-    const { margin, wordGap } = this.config;
+    // fix margin, wordGap, lineSpace
+    const { margin, wordGap, lineSpace } = this.config;
     this.setMargin(0);
     this.setWordGap(0);
+    this.setLineSpace(0);
     this.writeBuffer([ASCII_GS, 0x56, value]);
     this.setMargin(margin);
-    return this.setWordGap(wordGap);
+    this.setWordGap(wordGap);
+    return this.setLineSpace(lineSpace);
   }
 
   /**

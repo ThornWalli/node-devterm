@@ -2,6 +2,7 @@ export const MAX_DENSITY = 16;
 export const IMAGE_MAX = 9224;
 export const MAX_DOTS = 384;
 export const MAX_PIXELS = 48;
+export const DEFAULT_DENSITY = 6;
 
 export const ASCII_TAB = '\t'; // Horizontal tab
 export const ASCII_LF = '\n'; // Line feed,10
@@ -60,7 +61,7 @@ export const getDefaultConfig = () => {
     margin: 0,
     underline: 0,
     lineSpace: 0,
-    density: 6,
+    density: DEFAULT_DENSITY,
     underLine: 0,
     wordGap: 0
   };
