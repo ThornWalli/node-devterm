@@ -1,8 +1,9 @@
+
+export const DEFAULT_DENSITY = 6;
 export const MAX_DENSITY = 16;
 export const IMAGE_MAX = 9224;
 export const MAX_DOTS = 384;
 export const MAX_PIXELS = 48;
-export const DEFAULT_DENSITY = 6;
 
 export const ASCII_TAB = '\t'; // Horizontal tab
 export const ASCII_LF = '\n'; // Line feed,10
