@@ -18,11 +18,11 @@ const TempNominal = 25;
 /**
  * @returns SerialPort
  */
-export const getThermalPrinterPort = () => {
+export const getThermalPrinterPort = (autoOpen = false) => {
   return new SerialPort(SERIAL_PORT_IN, {
     baudRate: 115200,
     dataBits: 8,
-    autoOpen: false
+    autoOpen
   });
 };
 

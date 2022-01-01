@@ -44,9 +44,15 @@ export default class Printer {
   }
 
   async connect () {
-    await new Promise(resolve => {
+    await new Promise((resolve, reject) => {
+      this.serialPort.open(function (err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
       this.debug && consola.info('Connect to Printer');
-      this.serialPort.open(resolve);
     });
     this.connected = true;
   }
