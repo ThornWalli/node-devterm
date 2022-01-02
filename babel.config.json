@@ -4,17 +4,8 @@
             "@babel/preset-env",
             {
                 "targets": {
-                    "esmodules": false
+                    "esmodules": true
                 }
-            }
-        ]
-    ],
-    "plugins": [
-        "@babel/plugin-transform-modules-commonjs",
-        [
-            "@babel/plugin-transform-runtime",
-            {
-                "regenerator": true
             }
         ]
     ]
