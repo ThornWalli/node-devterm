@@ -1,4 +1,4 @@
-import { ALIGN, FONT } from '../config.js';
+import { ALIGN, FONT } from '../src/config.js';
 
 export const writePageTitle = (printer, text) => {
   printer.reset();
