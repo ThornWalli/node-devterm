@@ -16,14 +16,14 @@ const inputs = [
 ];
 
 const defaultOptions = {
-  bundle: true,
+  bundle: false,
   minify: false,
   sourcemap: true,
   treeShaking: true,
   platform: 'node',
   outbase: 'src',
-  plugins: [babel()],
-  external: ['canvas', 'serialport', 'fs', 'path']
+  plugins: [babel()]
+  // external: ['canvas', 'serialport', 'fs', 'path']
 };
 
 const onCatch = (err) => { console.error(err); global.process.exit(1); };
