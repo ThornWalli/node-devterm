@@ -7,13 +7,47 @@
   "exports": {
     ".": {
       "require": "./build/cjs/index.cjs",
-      "default": "./build/esm/index.js",
-      "import": "./build/esm/index.js"
+      "default": "./build/esm/index.js"
     },
     "./config": {
       "require": "./build/cjs/config.cjs",
-      "default": "./build/esm/config.js",
-      "import": "./build/esm/config.js"
+      "default": "./build/esm/config.js"
+    },
+    "./classes/Printer": {
+      "require": "./build/cjs/classes/Printer.cjs",
+      "default": "./build/esm/classes/Printer.js"
+    },
+    "./classes/Table": {
+      "require": "./build/cjs/classes/Table.cjs",
+      "default": "./build/esm/classes/Table.js"
+    },
+    "./utils/buffer": {
+      "require": "./build/cjs/utils/buffer.cjs",
+      "default": "./build/esm/utils/buffer.js"
+    },
+    "./utils/canvas": {
+      "require": "./build/cjs/utils/canvas.cjs",
+      "default": "./build/esm/utils/canvas.js"
+    },
+    "./utils/devterm": {
+      "require": "./build/cjs/utils/devterm.cjs",
+      "default": "./build/esm/utils/devterm.js"
+    },
+    "./utils/image": {
+      "require": "./build/cjs/utils/image.cjs",
+      "default": "./build/esm/utils/image.js"
+    },
+    "./utils/string": {
+      "require": "./build/cjs/utils/string.cjs",
+      "default": "./build/esm/utils/string.js"
+    },
+    "./utils/stuff": {
+      "require": "./build/cjs/utils/stuff.cjs",
+      "default": "./build/esm/utils/stuff.js"
+    },
+    "./charFonts/3x5": {
+      "require": "./build/cjs/charFonts/3x5.cjs",
+      "default": "./build/esm/charFonts/3x5.js"
     }
   },
   "module": "./build/esm/index.js",
