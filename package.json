@@ -2,9 +2,27 @@
   "name": "node-devterm",
   "version": "0.0.0",
   "description": "Useful package when using a DevTerm.",
-  "main": "index.js",
   "type": "module",
+  "main": "./build/esm/index.mjs",
+  "exports": {
+    ".": {
+      "require": "./build/cjs/index.cjs",
+      "default": "./build/esm/index.js",
+      "import": "./build/esm/index.js"
+    },
+    "./config": {
+      "require": "./build/cjs/config.cjs",
+      "default": "./build/esm/config.mjs",
+      "import": "./build/esm/config.js"
+    }
+  },
+  "module": "./build/esm/index.mjs",
+  "directories": {
+    "build": "build"
+  },
   "scripts": {
+    "postinstall": "npm run build",
+    "build": "node ./build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Thorn-Welf Walli <lammpee@gmail.com> (https://lammpee.de)",
@@ -19,6 +37,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
+    "esbuild": "^0.14.10",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3"
   }
