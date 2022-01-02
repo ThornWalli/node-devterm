@@ -1,4 +1,4 @@
-import { createCanvas, saveCanvasAsPng } from './canvas.js';
+import { createCanvas, saveCanvasAsPng } from 'node-devterm/canvas';
 
 export const getTest = () => {
   const width = 350;
