@@ -33,7 +33,6 @@
     "@babel/plugin-transform-modules-commonjs": "^7.16.7",
     "@babel/preset-env": "^7.16.7",
     "canvas": "^2.8.0",
-    "consola": "^2.15.3",
     "esbuild": "^0.14.10",
     "esbuild-plugin-babel": "^0.2.3",
     "floyd-steinberg": "^1.0.6",

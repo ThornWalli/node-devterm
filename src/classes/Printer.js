@@ -17,10 +17,6 @@ import {
   getQRCode, prepareCanvasForPrint
 } from '../utils/canvas.js';
 
-import Consola from 'consola';
-
-const consola = Consola.withTag('printer');
-
 const buffer = [];
 
 const WRITE_DEFAULTS = {
@@ -52,14 +48,14 @@ export default class Printer {
           resolve();
         }
       });
-      this.debug && consola.info('Connect to Printer');
+      this.debug && console.log('Connect to Printer');
     });
     this.connected = true;
   }
 
   async disconnect () {
     await new Promise(resolve => {
-      this.debug && consola.info('Disconnect from Printer');
+      this.debug && console.log('Disconnect from Printer');
       this.serialPort.close(resolve);
     });
     this.connected = false;
@@ -140,7 +136,7 @@ export default class Printer {
   write (value) {
     return new Promise((resolve, reject) => {
       buffer.push(() => {
-        this.debug && consola.info('Write to Printer', value);
+        this.debug && console.log('Write to Printer', value);
         if (this.active) {
           return (new Promise((resolve, reject) => {
             this.serialPort.write(value, (err) => {
