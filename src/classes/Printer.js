@@ -4,18 +4,18 @@ import SerialPort from 'serialport';
 import {
   getDefaultConfig, ALIGN, ASCII_DC2, ASCII_ESC, ASCII_GS, FONT,
   IMAGE_MAX, MAX_DENSITY, MAX_DOTS, UNDERLINE, ASCII_FF, MAX_PIXELS_FONT, FONT_DIMENSIONS
-} from 'node-devterm/config.js';
+} from 'node-devterm/config';
 import {
   get8BitRowsFromImageData, getImageSize,
   splitCanvasInImageDataChunks
-} from 'node-devterm/utils/image.js';
-import { uint8ArrayToBuffer } from 'node-devterm/utils/buffer.js';
-import font3x5 from 'node-devterm/charFonts/3x5.js';
-import Table from 'node-devterm/Table.js';
+} from 'node-devterm/utils/image';
+import { uint8ArrayToBuffer } from 'node-devterm/utils/buffer';
+import font3x5 from 'node-devterm/charFonts/3x5';
+import Table from 'node-devterm/Table';
 import {
   getBarcode, getCanvasFromImage,
   getQRCode, prepareCanvasForPrint
-} from 'node-devterm/utils/canvas.js';
+} from 'node-devterm/utils/canvas';
 
 const buffer = [];
 
