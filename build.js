@@ -12,7 +12,7 @@ const inputs = [
   { src: './src/utils/image.js', name: 'devterm.utils.image' },
   { src: './src/utils/string.js', name: 'devterm.utils.string' },
   { src: './src/utils/stuff.js', name: 'devterm.utils.stuff' },
-  { src: './src/charfonts/3x5.js', name: 'devterm.charfonts._3x5' }
+  { src: './src/charFonts/3x5.js', name: 'devterm.charfonts._3x5' }
 ];
 
 const defaultOptions = {
