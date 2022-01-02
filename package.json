@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Useful package when using a DevTerm.",
   "type": "module",
-  "main": "./build/esm/index.mjs",
+  "main": "./build/esm/index.js",
   "exports": {
     ".": {
       "require": "./build/cjs/index.cjs",
@@ -12,11 +12,11 @@
     },
     "./config": {
       "require": "./build/cjs/config.cjs",
-      "default": "./build/esm/config.mjs",
+      "default": "./build/esm/config.js",
       "import": "./build/esm/config.js"
     }
   },
-  "module": "./build/esm/index.mjs",
+  "module": "./build/esm/index.js",
   "directories": {
     "build": "build"
   },
