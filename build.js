@@ -22,7 +22,6 @@ const defaultOptions = {
   treeShaking: true,
   platform: 'node',
   outbase: 'src',
-  plugins: [babel()]
   // external: ['canvas', 'serialport', 'fs', 'path']
 };
 
@@ -51,6 +50,7 @@ inputs.forEach((item) => {
     entryPoints: [item.src],
     format: 'cjs',
     outdir: './build/cjs/',
+    plugins: [babel()],
     outExtension: { '.js': '.cjs' }
   }).catch(onCatch);
 });
