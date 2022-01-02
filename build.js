@@ -1,4 +1,5 @@
 import { build } from 'esbuild';
+import babel from 'esbuild-plugin-babel';
 
 const inputs = [
   { src: './src/index.js', name: 'devterm' },
@@ -15,13 +16,14 @@ const inputs = [
 ];
 
 const defaultOptions = {
-  bundle: false,
+  bundle: true,
   minify: false,
   sourcemap: true,
   treeShaking: true,
   platform: 'node',
-  outbase: 'src'
-  // external: ['canvas', 'serialport', 'fs']
+  outbase: 'src',
+  plugins: [babel()],
+  external: ['canvas', 'serialport', 'fs', 'path']
 };
 
 const onCatch = (err) => { console.error(err); global.process.exit(1); };
