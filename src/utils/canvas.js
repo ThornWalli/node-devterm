@@ -62,7 +62,6 @@ export const getCanvasFromImage = async (path) => {
  */
 export const resizeCanvas = (canvas, width) => {
   width = Math.min(canvas.width, Math.min((width || canvas.width), MAX_DOTS));
-  width += (width % 8) >= 3 ? (width % 8) : -(width % 8); // fix width for divide by 8
   const height = width * (canvas.height / canvas.width);
 
   const resizedCanvas = createCanvas(width, height);
