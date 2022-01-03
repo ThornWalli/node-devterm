@@ -1,5 +1,5 @@
 
-import { promises } from 'fs';
+import fs from 'fs';
 import canvas from 'canvas';
 import QRCode from 'qrcode';
 import JsBarcode from 'jsbarcode';
@@ -103,7 +103,7 @@ export const rotateCanvas90Deg = (canvas) => {
 
 export const saveCanvasAsPng = async (canvas, path) => {
   const pngData = await canvas.toBuffer('image/png');
-  return promises.writeFile(path, pngData);
+  return fs.promises.writeFile(path, pngData);
 };
 
 export const useFloydSteinberg = (canvas) => {
