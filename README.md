@@ -255,5 +255,3 @@ Gets if it is a DevTerm A06.
 | flipX     | `Boolean` | When set, image is flipped horizontally.                                                                                | `false` |
 | flipY     | `Boolean` | When set, image is flipped vertically.                                                                                  | `false` |
 | grayscale | `Boolean` | When set, the image is processed with the [`Floyd Steinberg`](https://www.npmjs.com/package/floyd-steinberg) algorithm. | `false` |
-
-
