@@ -62,6 +62,8 @@
   },
   "scripts": {
     "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable",
     "build": "node ./build.js",
     "lint:es": "eslint --ext .js .",
     "test": "npm run lint:es"
