@@ -40,6 +40,10 @@ export const getBattery = async () => {
   }
 };
 
+/**
+ * Get temperature from thermal printer.
+ * @returns Promise
+ */
 export const getThermalPrinterTemperature = async () => {
   let Rthermistor = 0; let TempThermistor = 0;
   let ADCSamples = 0;
@@ -89,6 +93,10 @@ const getThermalZoneDirs = () => {
   });
 };
 
+/**
+ * Checks if it is a DevTerm A06.
+ * @returns Promise
+ */
 export const isDevTermA06 = async () => {
   return (await getThermalZoneDirs()).length > 0;
 };

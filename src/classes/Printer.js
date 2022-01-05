@@ -171,7 +171,7 @@ export default class Printer {
   }
 
   /**
-   * Prints a String.
+   * Print a String.
    * @param String value
    * @returns Promise
    */
@@ -195,7 +195,7 @@ export default class Printer {
   }
 
   /**
-   * Prints a Barcode. Uses `jsbarcode` for generating.
+   * Print a Barcode. Uses `jsbarcode` for generating.
    * @param String text
    * @param Object barcodeOptions https://github.com/lindell/JsBarcode/wiki/Options
    * @param Object options
@@ -206,7 +206,7 @@ export default class Printer {
   }
 
   /**
-   * Prints a QRCode. Uses `node-qrcode` for generating.
+   * Print a QRCode. Uses `node-qrcode` for generating.
    * @param String text
    * @param Object qrCodeOptions https://github.com/soldair/node-qrcode#qr-code-options
    * @param Object options
@@ -220,7 +220,7 @@ export default class Printer {
   }
 
   /**
-   * Write Image from path or url, with optional width.
+   * Print a Image from path or url, with optional width.
    * @param String url
    * @param Number width
    * @returns Promise
@@ -241,7 +241,7 @@ export default class Printer {
   }
 
   /**
-   * Prints a list of ImageData.
+   * Print a list of ImageData.
    * @param Arrar imageDatas List of ImageDatas with max Size.
    * @returns Promise
    */
@@ -261,6 +261,7 @@ export default class Printer {
   }
 
   /**
+   * Send `Array` as `Buffer` to Printer.
    * @param Array value
    * @returns Promise
    */
@@ -271,6 +272,7 @@ export default class Printer {
   // commands
 
   /**
+   * Reset printer options.
    * @returns Promise
    */
   reset () {
@@ -280,24 +282,25 @@ export default class Printer {
 
   /**
    * Feed pitch by pixel.
-   * @param Number count Number of pixels.
+   * @param Number value
    * @returns Promise
    */
-  feedPitchByPixel (count) {
-    return this.writeBuffer([ASCII_ESC, 0x4a, posInt(count)]);
+  feedPitchByPixel (value) {
+    return this.writeBuffer([ASCII_ESC, 0x4a, posInt(value)]);
   }
 
   /**
    * Feed pitch by current font size.
-   * @param Number rows Number of rows.
+   * @param Number value
    * @returns Promise
    */
-  feedPitchByFont (rows) {
-    return this.writeBuffer([ASCII_ESC, 0x64, posInt(rows)]);
+  feedPitchByFont (value) {
+    return this.writeBuffer([ASCII_ESC, 0x64, posInt(value)]);
   }
 
   /**
-   * Set Margin by percentage. (0-1)
+   * Sets Margin by percentage in `float` number.
+   * Example: `25%` => `0.25`
    * @param Number value
    * @returns Promise
    */
@@ -309,13 +312,13 @@ export default class Printer {
   }
 
   /**
-   * Set current font.
+   * Sets print font.
    * 8x16 A: 0
    * 8x16 B: 4
    * 5x7:    1
    * 6x12:   2
    * 7x14:   3
-   * @param Number value Index from the Font.
+   * @param Number value
    * @returns Promise
    */
   setFont (value) {
@@ -324,7 +327,8 @@ export default class Printer {
   }
 
   /**
-   * @param Number value Light 0-15 Dark
+   * Sets print density from 0 to 15 for Dark.
+   * @param Number value
    * @returns Promise
    */
   setDensity (value) {
@@ -333,6 +337,7 @@ export default class Printer {
   }
 
   /**
+   * Sets print word gap.
    * @param Number value
    * @returns Promise
    */
@@ -342,7 +347,7 @@ export default class Printer {
   }
 
   /**
-   * Set Align.
+   * Sets print alignment.
    * Left:   0
    * Center: 1
    * Right:  2
@@ -372,6 +377,7 @@ export default class Printer {
   }
 
   /**
+   * Sets print line space.
    * @param Number value
    * @returns Promise
    */

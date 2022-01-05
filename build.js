@@ -21,8 +21,7 @@ const defaultOptions = {
   sourcemap: true,
   treeShaking: true,
   platform: 'node',
-  outbase: 'src',
-  // external: ['canvas', 'serialport', 'fs', 'path']
+  outbase: 'src'
 };
 
 const onCatch = (err) => { console.error(err); global.process.exit(1); };
