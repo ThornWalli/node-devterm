@@ -24,3 +24,12 @@ CHANGELOG.md
 .vscode
 tests
 img
+.branchlintrc
+.eslintrc.json
+.lintstagedrc
+.nvmrc
+.releaserc
+babel.config.json
+/build.js
+commitlint.config.cjs
+renovate.json
