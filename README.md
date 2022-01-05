@@ -229,7 +229,7 @@ https://github.com/clockworkpi/DevTerm/blob/ed9ab854c551e2002c9240eaa68bf91a108d
 
 ### printer.getBattery()
 - **Return** <Promise>
-- 
+
 Gets the battery status
 ### printer.getTemperatures()
 - **Return** <Promise>
