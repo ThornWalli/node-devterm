@@ -1,5 +1,12 @@
 # Project Changelog
 
+# [1.0.0-beta.5](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2022-01-05)
+
+
+### Bug Fixes
+
+* **deps:** clean deps ([5f04fd2](https://github.com/ThornWalli/node-devterm/commit/5f04fd28a6b16bdc8a53916790fd0255968219b7))
+
 # [1.0.0-beta.4](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2022-01-05)
 
 
