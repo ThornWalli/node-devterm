@@ -1,5 +1,12 @@
 # Project Changelog
 
+# [1.0.0-beta.4](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2022-01-05)
+
+
+### Bug Fixes
+
+* **npm:** clean package ([3741816](https://github.com/ThornWalli/node-devterm/commit/37418160ee74acdfaef3da46137e422e2ba585e5))
+
 # [1.0.0-beta.3](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2022-01-05)
 
 
