@@ -1,5 +1,12 @@
 # Project Changelog
 
+# [1.0.0-beta.7](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2022-01-06)
+
+
+### Bug Fixes
+
+* **imports:** fix internal imports ([1eea2b1](https://github.com/ThornWalli/node-devterm/commit/1eea2b16c09e1b85609c8a8a9b755a7db2e730fc))
+
 # [1.0.0-beta.6](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2022-01-06)
 
 
