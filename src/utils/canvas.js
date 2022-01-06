@@ -5,7 +5,7 @@ import QRCode from 'qrcode';
 import JsBarcode from 'jsbarcode';
 import floydSteinberg from 'floyd-steinberg';
 
-import { MAX_DOTS } from 'node-devterm/config';
+import { MAX_DOTS } from 'devterm/config';
 
 const { createCanvas, loadImage, Canvas } = canvas;
 

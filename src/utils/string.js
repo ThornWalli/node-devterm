@@ -1,4 +1,4 @@
-import { ALIGN } from 'node-devterm/config';
+import { ALIGN } from 'devterm/config';
 
 export const alignValue = (align, value, size, spacer) => {
   switch (align) {
