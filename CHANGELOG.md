@@ -1,5 +1,12 @@
 # Project Changelog
 
+# [1.0.0-beta.6](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2022-01-06)
+
+
+### Bug Fixes
+
+* **package:** change package name ([a780571](https://github.com/ThornWalli/node-devterm/commit/a78057148dd42b317f8ee94e18adb468e359829f))
+
 # [1.0.0-beta.5](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2022-01-05)
 
 
