@@ -5,7 +5,7 @@ import QRCode from 'qrcode';
 import JsBarcode from 'jsbarcode';
 import floydSteinberg from 'floyd-steinberg';
 
-import { MAX_DOTS } from 'devterm/config';
+import { MAX_DOTS } from '../config.js';
 
 const { createCanvas, loadImage, Canvas } = canvas;
 
@@ -140,7 +140,7 @@ export async function getQRCode (text, options = {}) {
     margin: 0,
     ...options
   };
-  const canvas = createCanvas(options.width, options.width);
+  const canvas = createCanvas(options.width || 1, options.width || 1);
   return new Promise(resolve => {
     QRCode.toCanvas(canvas, text, options, (err) => {
       if (err) {

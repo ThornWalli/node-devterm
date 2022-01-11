@@ -1,5 +1,5 @@
-import { createPrinter, getTemperatures, getBattery, getThermalPrinterTemperature, isDevTermA06, TableColumn } from '../index.js';
-import { ALIGN } from '../config.js';
+import { createPrinter, getTemperatures, getBattery, getThermalPrinterTemperature, isDevTermA06, TableColumn } from '../src/index.js';
+import { ALIGN } from '../src/config.js';
 import { writeHeadline, writePageTitle } from './utils.js';
 
 const printer = createPrinter();
