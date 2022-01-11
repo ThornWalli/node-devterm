@@ -1,5 +1,4 @@
 import { build } from 'esbuild';
-import babel from 'esbuild-plugin-babel';
 
 const inputs = [
   { src: './src/index.js', name: 'devterm' },
@@ -16,12 +15,14 @@ const inputs = [
 ];
 
 const defaultOptions = {
-  bundle: false,
+  bundle: true,
   minify: false,
   sourcemap: true,
   treeShaking: true,
   platform: 'node',
-  outbase: 'src'
+  outbase: 'src',
+  external: ['canvas', 'serialport', 'glob', 'path',
+    'qrcode', 'jsbarcode', 'floyd-steinberg']
 };
 
 const onCatch = (err) => { console.error(err); global.process.exit(1); };
@@ -49,7 +50,6 @@ inputs.forEach((item) => {
     entryPoints: [item.src],
     format: 'cjs',
     outdir: './build/cjs/',
-    plugins: [babel()],
     outExtension: { '.js': '.cjs' }
   }).catch(onCatch);
 });

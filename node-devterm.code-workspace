@@ -45,12 +45,12 @@
     },
     "files.associations": {},
     "javascript.format.enable": false,
-    "telemetry.enableCrashReporter": false,
-    "telemetry.enableTelemetry": false,
     "window.title": "${dirty} ${activeEditorMedium}${separator}${rootName}",
     "workbench.settings.enableNaturalLanguageSearch": false
   },
   "extensions": {
-    "recommendations": []
+    "recommendations": [
+      "dbaeumer.vscode-eslint"
+    ]
   }
 }

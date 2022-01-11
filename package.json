@@ -76,16 +76,10 @@
     "serialport": "^9.2.8"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.7",
-    "@babel/eslint-parser": "^7.16.3",
-    "@babel/plugin-transform-modules-commonjs": "^7.16.7",
-    "@babel/plugin-transform-runtime": "^7.16.7",
-    "@babel/preset-env": "^7.16.7",
     "@commitlint/cli": "^16.0.1",
     "@commitlint/config-conventional": "^16.0.0",
     "commitlint": "^16.0.1",
     "esbuild": "^0.14.10",
-    "esbuild-plugin-babel": "^0.2.3",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "husky": "^7.0.4",
