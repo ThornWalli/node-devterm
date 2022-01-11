@@ -1,9 +1,9 @@
-import { getThermalPrinterPort } from 'devterm/utils/devterm';
-import Printer from 'devterm/classes/Printer';
+import { getThermalPrinterPort } from './utils/devterm.js';
+import Printer from './classes/Printer.js';
 
-export { default as Printer } from 'devterm/classes/Printer';
-export { getBattery, getThermalPrinterTemperature, getTemperatures, isDevTermA06 } from 'devterm/utils/devterm';
-export { default as Table, TableColumn } from 'devterm/classes/Table';
+export { default as Printer } from './classes/Printer.js';
+export { getBattery, getThermalPrinterTemperature, getTemperatures, isDevTermA06 } from './utils/devterm.js';
+export { default as Table, TableColumn } from './classes/Table.js';
 
 export const createPrinter = () => {
   return new Printer(getThermalPrinterPort());

@@ -1,4 +1,4 @@
-import { IMAGE_MAX } from 'devterm/config';
+import { IMAGE_MAX } from '../config.js';
 
 export const getImageSize = (width, height) => {
   const xL = (width / 8) % 256;

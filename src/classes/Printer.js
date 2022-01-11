@@ -4,18 +4,18 @@ import SerialPort from 'serialport';
 import {
   getDefaultConfig, ALIGN, ASCII_DC2, ASCII_ESC, ASCII_GS, FONT,
   IMAGE_MAX, MAX_DENSITY, MAX_DOTS, UNDERLINE, ASCII_FF, MAX_PIXELS_FONT, FONT_DIMENSIONS
-} from 'devterm/config';
+} from '../config.js';
 import {
   get8BitRowsFromImageData, getImageSize,
   splitCanvasInImageDataChunks
-} from 'devterm/utils/image';
-import { uint8ArrayToBuffer } from 'devterm/utils/buffer';
-import font3x5 from 'devterm/charFonts/3x5';
-import Table from 'devterm/classes/Table';
+} from '../utils/image.js';
+import { uint8ArrayToBuffer } from '../utils/buffer.js';
+import font3x5 from '../charFonts/3x5.js';
+import Table from '../classes/Table.js';
 import {
   getBarcode, getCanvasFromImage,
   getQRCode, prepareCanvasForPrint
-} from 'devterm/utils/canvas';
+} from '../utils/canvas.js';
 
 const buffer = [];
 
@@ -214,7 +214,7 @@ export default class Printer {
    */
   async writeQRCode (text, qrCodeOptions, options) {
     qrCodeOptions = qrCodeOptions || {};
-    qrCodeOptions.width = qrCodeOptions?.width || options?.width || MAX_DOTS;
+    qrCodeOptions.width = qrCodeOptions?.width || options?.width;
 
     return this.writeCanvas(await getQRCode(text, qrCodeOptions), options);
   }

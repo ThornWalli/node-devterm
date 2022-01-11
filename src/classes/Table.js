@@ -1,5 +1,5 @@
-import { ALIGN, MAX_DOTS } from 'devterm/config';
-import { alignValue, clampValue } from 'devterm/utils/string';
+import { ALIGN, MAX_DOTS } from '../config.js';
+import { alignValue, clampValue } from '../utils/string.js';
 
 export class TableColumn {
   /**
