@@ -1,5 +1,12 @@
 # Project Changelog
 
+# [1.0.0-beta.8](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.7...v1.0.0-beta.8) (2022-01-11)
+
+
+### Bug Fixes
+
+* **build:** improve cjs build; remove babel ([e5e5503](https://github.com/ThornWalli/node-devterm/commit/e5e55032e01c944ab3ceef9b24204515fd58928b))
+
 # [1.0.0-beta.7](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2022-01-06)
 
 
