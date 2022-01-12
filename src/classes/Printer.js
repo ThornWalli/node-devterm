@@ -3,19 +3,15 @@ import SerialPort from 'serialport';
 
 import {
   getDefaultConfig, ALIGN, ASCII_DC2, ASCII_ESC, ASCII_GS, FONT,
-  IMAGE_MAX, MAX_DENSITY, MAX_DOTS, UNDERLINE, ASCII_FF, MAX_PIXELS_FONT, FONT_DIMENSIONS
+  MAX_DENSITY, MAX_DOTS, UNDERLINE, ASCII_FF, MAX_PIXELS_FONT, FONT_DIMENSIONS
 } from '../config.js';
-import {
-  get8BitRowsFromImageData, getImageSize,
-  splitCanvasInImageDataChunks
-} from '../utils/image.js';
-import { uint8ArrayToBuffer } from '../utils/buffer.js';
 import font3x5 from '../charFonts/3x5.js';
 import Table from '../classes/Table.js';
 import {
   getBarcode, getCanvasFromImage,
   getQRCode, prepareCanvasForPrint
 } from '../utils/canvas.js';
+import { getImageWriteBuffersFromCanvas } from '../utils/printer.js';
 
 const buffer = [];
 
@@ -237,27 +233,8 @@ export default class Printer {
    */
   async writeCanvas (canvas, options) {
     canvas = prepareCanvasForPrint(canvas, options);
-    return this.writeImageDataList(await splitCanvasInImageDataChunks(canvas));
-  }
-
-  /**
-   * Print a list of ImageData.
-   * @param Arrar imageDatas List of ImageDatas with max Size.
-   * @returns Promise
-   */
-  async writeImageDataList (imageDataList) {
-    const write = async (imageData) => {
-      const rows = get8BitRowsFromImageData(imageData);
-      await this.writeBuffer(getWriteImageCommand(rows[0].length * 8, imageData.height));
-      let pipe = Promise.resolve();
-      for (let y = 0; y < rows.length; y++) {
-        const buf = uint8ArrayToBuffer(rows[y]);
-        pipe = pipe.then(() => this.write(buf));
-      }
-      return pipe;
-    };
-
-    return imageDataList.reduce((result, imageData) => result.then(() => write(imageData)), Promise.resolve());
+    const commands = await getImageWriteBuffersFromCanvas(canvas);
+    return commands.reduce((result, command) => result.then(() => this.write(command)), Promise.resolve());
   }
 
   /**
@@ -410,25 +387,5 @@ export default class Printer {
     return this.writeBuffer([ASCII_DC2, 0x54]);
   }
 }
-
-const getWriteImageCommand = (width, height) => {
-  const { xL, xH, yL, yH, k } = getImageSize(width, height);
-
-  const cmd = [
-    ASCII_GS,
-    0x76, // 118
-    0x30, // 48,
-    0,
-    xL, xH, yL, yH
-  ];
-
-  if (cmd[0] === ASCII_GS && cmd[1] === 118 && cmd[2] === 48) {
-    if (!(k <= IMAGE_MAX)) {
-      throw new Error(`Image too large; ${k} > ${IMAGE_MAX}`);
-    }
-  }
-
-  return cmd;
-};
 
 const posInt = v => Math.abs(parseInt(v));

@@ -1,3 +1,4 @@
+
 export const uint8ArrayToBuffer = function (array) {
   const buf = Buffer.alloc(array.byteLength);
   const view = new Uint8Array(array);

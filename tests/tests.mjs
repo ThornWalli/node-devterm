@@ -10,6 +10,7 @@ async function run () {
 
   printer.reset();
 
+  printer.setAlign(ALIGN.RIGHT);
   await printer.writeQRCode('test', {
     errorCorrectionLevel: 'M',
     margin: 0,
