@@ -33,3 +33,4 @@ babel.config.json
 /build.js
 commitlint.config.cjs
 renovate.json
+/src

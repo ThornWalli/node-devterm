@@ -1,5 +1,6 @@
 
 import SerialPort from 'serialport';
+import { Buffer } from 'buffer';
 
 import {
   getDefaultConfig, ALIGN, ASCII_DC2, ASCII_ESC, ASCII_GS, FONT,
