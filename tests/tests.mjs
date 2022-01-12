@@ -10,12 +10,12 @@ async function run () {
 
   printer.reset();
 
-  await printer.writeQRCode('test',{
-      errorCorrectionLevel: 'M',
-      margin: 0,
-      scale: 4,
-      small: false
-    })
+  await printer.writeQRCode('test', {
+    errorCorrectionLevel: 'M',
+    margin: 0,
+    scale: 4,
+    small: false
+  });
   printer.reset();
   printer.feedPitchByFont(14);
   printer.addCutLine();
@@ -43,7 +43,6 @@ async function run () {
   // printer.addCutLine();
   // printer.addCutLine();
   // printer.writeLine('test');
-
 }
 
 run();

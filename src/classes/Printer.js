@@ -248,7 +248,7 @@ export default class Printer {
   async writeImageDataList (imageDataList) {
     const write = async (imageData) => {
       const rows = get8BitRowsFromImageData(imageData);
-      await this.writeBuffer(getWriteImageCommand(imageData.width, imageData.height));
+      await this.writeBuffer(getWriteImageCommand(rows[0].length * 8, imageData.height));
       let pipe = Promise.resolve();
       for (let y = 0; y < rows.length; y++) {
         const buf = uint8ArrayToBuffer(rows[y]);

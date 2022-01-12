@@ -69,11 +69,11 @@ export const get8BitRowsFromImageData = (imageData) => {
   const pixels = imageDataToPixelArray(imageData);
 
   for (let y = 0; y < height; y++) {
-    lines[y] = new Uint8Array(width / 8);
+    lines[y] = new Uint8Array(Math.round(width / 8));
     for (let x = 0; x < lines[y].length; x++) {
       lines[y][x] = 0;
       for (let n = 0; n < 8; n++) {
-        const { r, g, b, a } = pixels[y][(x * 8 + n)];
+        const { r, g, b, a } = pixels[y][(x * 8 + n)] || { r: 255, g: 255, b: 255, a: 255 };
         const brightness = ((r + g + b) / 3) / 255;
         // only print dark stuff
         if (brightness < 0.6 || a < 0.6) {
