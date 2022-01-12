@@ -1,5 +1,12 @@
 # Project Changelog
 
+# [1.0.0-beta.11](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.10...v1.0.0-beta.11) (2022-01-12)
+
+
+### Bug Fixes
+
+* **printer:** fix missing buffer import ([33c1832](https://github.com/ThornWalli/node-devterm/commit/33c18322d02c578f58e193865e11c0c67b25233c))
+
 # [1.0.0-beta.10](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.9...v1.0.0-beta.10) (2022-01-12)
 
 
