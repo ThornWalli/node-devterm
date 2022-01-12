@@ -1,5 +1,12 @@
 # Project Changelog
 
+# [1.0.0-beta.9](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2022-01-12)
+
+
+### Bug Fixes
+
+* **image:** fix image print width ([9962ec5](https://github.com/ThornWalli/node-devterm/commit/9962ec5b394e9c88302fd101e38076d19d7af5c5))
+
 # [1.0.0-beta.8](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.7...v1.0.0-beta.8) (2022-01-11)
 
 
