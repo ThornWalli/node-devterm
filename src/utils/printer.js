@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer';
 import { ASCII_GS, IMAGE_MAX } from '../config.js';
 import { uint8ArrayToBuffer } from './buffer.js';
 import { get8BitRowsFromImageData, getImageSize, splitCanvasInImageDataChunks } from './image.js';

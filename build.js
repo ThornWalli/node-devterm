@@ -22,8 +22,7 @@ const defaultOptions = {
   treeShaking: true,
   platform: 'node',
   outbase: 'src',
-  external: ['canvas', 'serialport', 'glob', 'path',
-    'qrcode', 'jsbarcode', 'floyd-steinberg']
+  external: ['canvas', 'serialport', 'glob', 'path', 'buffer', 'fs', 'qrcode', 'jsbarcode', 'floyd-steinberg']
 };
 
 const onCatch = (err) => { console.error(err); global.process.exit(1); };
