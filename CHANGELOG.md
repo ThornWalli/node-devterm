@@ -1,5 +1,13 @@
 # Project Changelog
 
+# [1.0.0-beta.10](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.9...v1.0.0-beta.10) (2022-01-12)
+
+
+### Bug Fixes
+
+* **printer:** fix imports and writeImage ([6008d93](https://github.com/ThornWalli/node-devterm/commit/6008d93e6bbe42549f0d86fa2357d05d49f60775))
+* **printer:** improve code ([f3a33f1](https://github.com/ThornWalli/node-devterm/commit/f3a33f1d9b683ad9fd10631093744647f2a41e49))
+
 # [1.0.0-beta.9](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2022-01-12)
 
 
