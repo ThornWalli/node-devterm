@@ -1,6 +1,6 @@
-import { ASCII_GS, IMAGE_MAX } from '../config';
-import { uint8ArrayToBuffer } from './buffer';
-import { get8BitRowsFromImageData, getImageSize, splitCanvasInImageDataChunks } from './image';
+import { ASCII_GS, IMAGE_MAX } from '../config.js';
+import { uint8ArrayToBuffer } from './buffer.js';
+import { get8BitRowsFromImageData, getImageSize, splitCanvasInImageDataChunks } from './image.js';
 
 export const getWriteImageCommand = (width, height) => {
   const { xL, xH, yL, yH, k } = getImageSize(width, height);

@@ -233,8 +233,8 @@ export default class Printer {
    */
   async writeCanvas (canvas, options) {
     canvas = prepareCanvasForPrint(canvas, options);
-    const commands = getImageWriteBuffersFromCanvas(canvas);
-    return commands.reduce((result, imageData) => result.then(() => this.write(imageData)), Promise.resolve());
+    const commands = await getImageWriteBuffersFromCanvas(canvas);
+    return commands.reduce((result, command) => result.then(() => this.write(command)), Promise.resolve());
   }
 
   /**
