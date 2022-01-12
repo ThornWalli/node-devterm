@@ -1,5 +1,12 @@
 # Project Changelog
 
+# [1.0.0-beta.12](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2022-01-12)
+
+
+### Bug Fixes
+
+* **buffer:** fix missing buffer imports ([9c9aa64](https://github.com/ThornWalli/node-devterm/commit/9c9aa64f5b367db2493d60bdce06fcf71f5b1cb8))
+
 # [1.0.0-beta.11](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.10...v1.0.0-beta.11) (2022-01-12)
 
 
