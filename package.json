@@ -51,6 +51,10 @@
       "require": "./build/cjs/utils/stuff.cjs",
       "default": "./build/esm/utils/stuff.js"
     },
+    "./utils/printer": {
+      "require": "./build/cjs/utils/printer.cjs",
+      "default": "./build/esm/utils/printer.js"
+    },
     "./charFonts/3x5": {
       "require": "./build/cjs/charFonts/3x5.cjs",
       "default": "./build/esm/charFonts/3x5.js"
