@@ -11,23 +11,47 @@ const { createCanvas, loadImage, Canvas } = canvas;
 
 export { createCanvas, Canvas };
 
+export const getDefaultPrepareOptions = () => ({ width: null, rotate: false, flipX: false, flipY: false, invert: false, grayscale: false });
+
 export const prepareCanvasForPrint = (canvas, options) => {
-  options = { width: null, rotate: false, flipX: false, flipY: false, grayscale: false, ...options };
+  options = { ...getDefaultPrepareOptions(), ...options };
+
+  canvas = getResizedCanvas(canvas, options.width);
 
   if (options.rotate) {
-    canvas = rotateCanvas90Deg(canvas);
+    canvas = getRotateedCanvas90Deg(canvas);
   }
 
   if (options.flipX || options.flipY) {
-    canvas = flipCanvas(canvas, options.flipX, options.flipY);
+    canvas = getFlippedCanvas(canvas, options.flipX, options.flipY);
   }
 
-  canvas = resizeCanvas(canvas, options.width);
+  if (options.invert) {
+    canvas = invertCanvas(canvas);
+  }
 
   if (options.grayscale) {
     canvas = useFloydSteinberg(canvas);
   }
 
+  return canvas;
+};
+
+/**
+ * Inverts the specified canvas
+ * @param Canvas canvas
+ * @returns Canvas
+ */
+export const invertCanvas = (canvas) => {
+  const ctx = canvas.getContext('2d');
+  const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    data[i] = 255 - data[i];
+    data[i + 1] = 255 - data[i + 1];
+    data[i + 2] = 255 - data[i + 2];
+  }
+  ctx.putImageData(imageData, 0, 0);
   return canvas;
 };
 
@@ -60,7 +84,7 @@ export const getCanvasFromImage = async (path) => {
  * @param Number width
  * @returns Canvas
  */
-export const resizeCanvas = (canvas, width) => {
+export const getResizedCanvas = (canvas, width) => {
   width = Math.min(canvas.width, Math.min((width || canvas.width), MAX_DOTS));
   const height = width * (canvas.height / canvas.width);
 
@@ -76,7 +100,7 @@ export const cloneCanvas = (canvas) => {
   return clone;
 };
 
-export const flipCanvas = (canvas, horizontal, vertical) => {
+export const getFlippedCanvas = (canvas, horizontal, vertical) => {
   const mirrorCanvas = createCanvas(canvas.width, canvas.height);
   const ctx = mirrorCanvas.getContext('2d');
   console.log(1 - horizontal * 2, 1 - vertical * 2);
@@ -88,7 +112,7 @@ export const flipCanvas = (canvas, horizontal, vertical) => {
   return mirrorCanvas;
 };
 
-export const rotateCanvas90Deg = (canvas) => {
+export const getRotateedCanvas90Deg = (canvas) => {
   let ctx = canvas.getContext('2d');
   const rotatedCanvas = createCanvas(canvas.height, canvas.width);
   ctx = rotatedCanvas.getContext('2d');
