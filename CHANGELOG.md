@@ -1,5 +1,12 @@
 # Project Changelog
 
+# [1.0.0-beta.13](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.12...v1.0.0-beta.13) (2022-01-13)
+
+
+### Bug Fixes
+
+* **canvas:** add canvas invert ([29677f8](https://github.com/ThornWalli/node-devterm/commit/29677f8b2df4446acf89b4c86be33823ab879a78))
+
 # [1.0.0-beta.12](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2022-01-12)
 
 
