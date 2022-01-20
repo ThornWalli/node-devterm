@@ -19,7 +19,7 @@ export const prepareCanvasForPrint = (canvas, options) => {
   canvas = getResizedCanvas(canvas, options.width);
 
   if (options.rotate) {
-    canvas = getRotateedCanvas90Deg(canvas);
+    canvas = getRotatedCanvas90Deg(canvas);
   }
 
   if (options.flipX || options.flipY) {
@@ -34,6 +34,29 @@ export const prepareCanvasForPrint = (canvas, options) => {
     canvas = useFloydSteinberg(canvas);
   }
 
+  canvas = applyBackground(canvas);
+
+  return canvas;
+};
+
+/**
+ * Inverts the specified canvas
+ * @param Canvas canvas
+ * @returns Canvas
+ */
+export const applyBackground = (canvas) => {
+  const ctx = canvas.getContext('2d');
+  const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    if (data[i + 3] === 0) {
+      data[i] = 255;
+      data[i + 1] = 255;
+      data[i + 2] = 255;
+      data[i + 3] = 255;
+    }
+  }
+  ctx.putImageData(imageData, 0, 0);
   return canvas;
 };
 
@@ -112,12 +135,10 @@ export const getFlippedCanvas = (canvas, horizontal, vertical) => {
   return mirrorCanvas;
 };
 
-export const getRotateedCanvas90Deg = (canvas) => {
+export const getRotatedCanvas90Deg = (canvas) => {
   let ctx = canvas.getContext('2d');
   const rotatedCanvas = createCanvas(canvas.height, canvas.width);
   ctx = rotatedCanvas.getContext('2d');
-  ctx.fillStyle = 'white';
-  ctx.fillRect(0, 0, canvas.height, canvas.width);
   ctx.translate(canvas.height, 0);
   ctx.rotate(Math.PI / 2);
   ctx.drawImage(canvas, 0, 0);
