@@ -1,6 +1,6 @@
 
-import { createPrinter } from '../index.js';
-import { getCuby } from '../utils/stuff.js';
+import { createPrinter } from '../src/index.js';
+import { getCuby } from '../src/utils/stuff.js';
 import { writeHeadline, writePageTitle } from './utils.js';
 
 const printer = createPrinter();
@@ -9,6 +9,7 @@ async function run () {
   writePageTitle(printer, 'Image Examples');
 
   writeHeadline(printer, 'Canvas');
+
   /**
    * Example Canvas
    */
