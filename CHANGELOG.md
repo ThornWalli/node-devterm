@@ -1,5 +1,12 @@
 # Project Changelog
 
+# [1.0.0-beta.14](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.13...v1.0.0-beta.14) (2022-01-20)
+
+
+### Bug Fixes
+
+* **canvas:** fix image background ([c793ad7](https://github.com/ThornWalli/node-devterm/commit/c793ad76728c11ad8e2823a4b9b52cfb20e1c303))
+
 # [1.0.0-beta.13](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.12...v1.0.0-beta.13) (2022-01-13)
 
 
