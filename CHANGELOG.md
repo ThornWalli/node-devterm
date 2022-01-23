@@ -1,5 +1,12 @@
 # Project Changelog
 
+# [1.0.0-beta.15](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.14...v1.0.0-beta.15) (2022-01-23)
+
+
+### Bug Fixes
+
+* **canvas:** change resize order ([3334e71](https://github.com/ThornWalli/node-devterm/commit/3334e71ba3d6ae4afef0c2d354c3433cd703b41e))
+
 # [1.0.0-beta.14](https://github.com/ThornWalli/node-devterm/compare/v1.0.0-beta.13...v1.0.0-beta.14) (2022-01-20)
 
 
