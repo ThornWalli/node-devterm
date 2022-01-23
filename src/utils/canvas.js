@@ -16,11 +16,11 @@ export const getDefaultPrepareOptions = () => ({ width: null, rotate: false, fli
 export const prepareCanvasForPrint = (canvas, options) => {
   options = { ...getDefaultPrepareOptions(), ...options };
 
-  canvas = getResizedCanvas(canvas, options.width);
-
   if (options.rotate) {
     canvas = getRotatedCanvas90Deg(canvas);
   }
+
+  canvas = getResizedCanvas(canvas, options.width);
 
   if (options.flipX || options.flipY) {
     canvas = getFlippedCanvas(canvas, options.flipX, options.flipY);
