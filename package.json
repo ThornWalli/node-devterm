@@ -80,14 +80,14 @@
     "serialport": "^9.2.8"
   },
   "devDependencies": {
-    "@commitlint/cli": "^16.0.1",
-    "@commitlint/config-conventional": "^16.0.0",
-    "commitlint": "^16.0.1",
-    "esbuild": "^0.14.10",
-    "eslint": "^7.32.0",
-    "eslint-config-standard": "^16.0.3",
-    "husky": "^7.0.4",
-    "lint-staged": "^12.1.5",
-    "pinst": "^2.1.6"
+    "@commitlint/cli": "16.0.2",
+    "@commitlint/config-conventional": "16.0.0",
+    "commitlint": "16.0.2",
+    "esbuild": "0.14.11",
+    "eslint": "7.32.0",
+    "eslint-config-standard": "16.0.3",
+    "husky": "7.0.4",
+    "lint-staged": "12.1.7",
+    "pinst": "2.1.6"
   }
 }
