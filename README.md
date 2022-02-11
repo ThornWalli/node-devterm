@@ -228,23 +228,23 @@ https://github.com/clockworkpi/DevTerm/blob/ed9ab854c551e2002c9240eaa68bf91a108d
 ## Utils
 
 ### printer.getBattery()
-- **Return** <Promise>
+- **Return** `<Promise>`
 
 Gets the battery status
 ### printer.getTemperatures()
-- **Return** <Promise>
+- **Return** `<Promise>`
 
 Gets temperatures from DevTerm.
 
 > Currently only the DevTerm A06 is supported.
 ### printer.getThermalPrinterTemperature()
-- **Return** <Promise>
+- **Return** `<Promise>`
 
 Gets temperature from thermal printer.
 ### printer.isDevTermA06()
-- **Return** <Promise>
+- **Return** `<Promise>`
 
-Gets if it is a DevTerm A06.
+Returns `true` if it is an A06.
 
 ## Canvas Options
 
