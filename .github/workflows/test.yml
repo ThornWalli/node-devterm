@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    name: Test & Build
+    name: Test
     runs-on: ${{ matrix.os }}
 
     strategy:
